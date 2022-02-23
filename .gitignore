@@ -1,0 +1,7 @@
+# Project exclude paths
+/out/
+/src/com/config/jdbc.properties
+/web/images/
+/web/WEB-INF/lib/
+*.iml
+.idea
