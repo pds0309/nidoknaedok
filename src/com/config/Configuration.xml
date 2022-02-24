@@ -4,7 +4,11 @@
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
     <properties resource="com/config/jdbc.properties"/>
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
     <typeAliases>
+        <typeAlias type="com.dto.member.MemberDTO" alias="MemberDTO"/>
     </typeAliases>
     <environments default="development">
         <environment id="development">
@@ -18,5 +22,6 @@
         </environment>
     </environments>
     <mappers>
+        <mapper resource="com/config/MemberMapper.xml"/>
     </mappers>
 </configuration>
