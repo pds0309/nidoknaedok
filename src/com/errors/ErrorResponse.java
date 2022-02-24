@@ -31,4 +31,20 @@ public class ErrorResponse {
     public static ErrorResponse of(ErrorCode errorCode, String detail) {
         return new ErrorResponse(errorCode, detail);
     }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public String getDetail() {
+        return detail;
+    }
 }
