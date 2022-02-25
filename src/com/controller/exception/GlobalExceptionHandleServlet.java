@@ -5,6 +5,7 @@ import com.controller.common.SendJSONResponse;
 import com.errors.ErrorCode;
 import com.errors.ErrorResponse;
 import com.errors.exception.InvalidValueException;
+import com.errors.exception.UpperCustomException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,11 +39,10 @@ public class GlobalExceptionHandleServlet extends HttpServlet {
             return;
         }
 
-        if (exception instanceof InvalidValueException) {
-            errorCode = ErrorCode.INVALID_INPUT;
+        if (exception instanceof UpperCustomException) {
+            errorCode = ((UpperCustomException) (exception)).getErrorCode();
             logger.error(MessageFormat.format("{0}:{1}", errorCode, exception.getMessage()));
-            SendJSONResponse.sendAsJson(response, errorCode);
-            return;
+            SendJSONResponse.sendAsJson(response, errorCode, exception.getMessage());
         }
     }
 
