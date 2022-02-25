@@ -12,6 +12,7 @@ public class MemberDTO {
     private MemberDTO() {
         //
     }
+
     /**
      * 멤버 가입 모델
      */
@@ -22,18 +23,20 @@ public class MemberDTO {
         private String email;
         private String address;
         private String addressDetail;
+        private MemberRole authority;
 
         public SignUp() {
             //
         }
 
         public SignUp(String name, String password, String email, String address, String addressDetail) {
-            validate(name, password, email);
+            validate(name, email, password);
             this.name = name;
             this.password = password;
             this.email = email;
             this.address = address;
             this.addressDetail = addressDetail;
+            this.authority = MemberRole.NORMAL;
         }
 
         public String getName() {
@@ -55,8 +58,12 @@ public class MemberDTO {
         public String getAddressDetail() {
             return addressDetail;
         }
+
+        public MemberRole getAuthority() {
+            return authority;
+        }
     }
-    
+
     public static void validate(String name, String email, String password) {
         validName(name);
         validPassword(password);
