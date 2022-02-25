@@ -58,4 +58,65 @@ public class MemberDTO {
             return authority;
         }
     }
+
+    /**
+     * 멤버 조회에 대한 모델
+     * 다양한 형태일 수 있다.
+     */
+    public static class Info {
+        private long id;
+        private String name;
+        private String email;
+        private String address;
+        private String addressDetail;
+        private String createdAt;
+        private MemberRole authority;
+        private int point;
+        private String profileImage;
+        private String introduction;
+
+        public Info() {
+            //
+        }
+
+        public long getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public String getAddress() {
+            return address;
+        }
+
+        public String getAddressDetail() {
+            return addressDetail;
+        }
+
+        public String getCreatedAt() {
+            return createdAt;
+        }
+
+        public MemberRole getAuthority() {
+            return authority;
+        }
+
+        public int getPoint() {
+            return point;
+        }
+
+        public String getProfileImage() {
+            return profileImage;
+        }
+
+        public String getIntroduction() {
+            return introduction;
+        }
+    }
 }
