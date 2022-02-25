@@ -3,6 +3,7 @@ package com.service.member;
 import com.config.MySqlSessionFactory;
 import com.dao.member.MemberDAO;
 import com.dto.member.MemberDTO;
+import com.errors.exception.InvalidValueException;
 import org.apache.ibatis.session.SqlSession;
 
 public class MemberServiceImpl implements MemberService {
@@ -21,26 +22,24 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public long existCheckByName(String name) {
+    public MemberDTO.Info existCheckByName(String name) {
         SqlSession session = MySqlSessionFactory.getSession();
-        long result = 0;
         try {
-            result = new MemberDAO().existCheckByName(session, name);
+            return new MemberDAO().existCheckByName(session, name)
+                    .orElseThrow(() -> new InvalidValueException("이미 존재하는 이름입니다"));
         } finally {
             session.close();
         }
-        return result;
     }
 
     @Override
-    public long existCheckByEmail(String email) {
+    public MemberDTO.Info existCheckByEmail(String email) {
         SqlSession session = MySqlSessionFactory.getSession();
-        long result = 0;
         try {
-            result = new MemberDAO().existCheckByEmail(session, email);
+            return new MemberDAO().existCheckByEmail(session, email)
+                    .orElseThrow(() -> new InvalidValueException("이미 존재하는 이메일 입니다"));
         } finally {
             session.close();
         }
-        return result;
     }
 }

@@ -8,14 +8,14 @@
         values (#{name}, #{password}, #{email}, #{address}, #{addressDetail}, #{authority}, 100)
     </insert>
 
-    <select id="existCheckByName" parameterType="string" resultType="long">
-        select id
+    <select id="existCheckByName" parameterType="string" resultType="com.dto.member.MemberDTO$Info">
+        select id, name, to_char(created_at,'YYYY/MM/DD') as created_at
         from members
         where name = #{name}
     </select>
 
-    <select id="existCheckByEmail" parameterType="string" resultType="long">
-        select id
+    <select id="existCheckByEmail" parameterType="string" resultType="com.dto.member.MemberDTO$Info">
+        select id, name, to_char(created_at,'YYYY/MM/DD') as created_at
         from members
         where email = #{email}
     </select>

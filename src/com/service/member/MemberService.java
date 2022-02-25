@@ -5,7 +5,7 @@ import com.dto.member.MemberDTO;
 public interface MemberService {
     int signUpMember(MemberDTO.SignUp member);
 
-    long existCheckByName(String name);
+    MemberDTO.Info existCheckByName(String name);
 
-    long existCheckByEmail(String email);
+    MemberDTO.Info existCheckByEmail(String email);
 }
