@@ -4,4 +4,8 @@ import com.dto.member.MemberDTO;
 
 public interface MemberService {
     int signUpMember(MemberDTO.SignUp member);
+
+    void validInputName(String name);
+
+    void validInputEmail(String email);
 }

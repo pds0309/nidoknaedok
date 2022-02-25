@@ -1,8 +1,10 @@
 package com.errors.exception;
 
-public class InvalidValueException extends RuntimeException {
+import com.errors.ErrorCode;
+
+public class InvalidValueException extends UpperCustomException {
 
     public InvalidValueException(String message) {
-        super(message);
+        super(message, ErrorCode.INVALID_INPUT);
     }
 }

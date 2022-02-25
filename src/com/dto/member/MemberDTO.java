@@ -1,17 +1,13 @@
 package com.dto.member;
 
-import java.text.MessageFormat;
-import java.util.regex.Pattern;
+import com.utils.RegexValidator;
 
 public class MemberDTO {
-
-    private static final String REGEX_NAME = "^[가-힣a-zA-Z0-9_]{2,12}$";
-    private static final String REGEX_EMAIL = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
-    private static final String REGEX_PASSWORD = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d~!@#]{8,20}$";
 
     private MemberDTO() {
         //
     }
+
     /**
      * 멤버 가입 모델
      */
@@ -22,18 +18,20 @@ public class MemberDTO {
         private String email;
         private String address;
         private String addressDetail;
+        private MemberRole authority;
 
         public SignUp() {
             //
         }
 
         public SignUp(String name, String password, String email, String address, String addressDetail) {
-            validate(name, password, email);
+            RegexValidator.validate(name, email, password);
             this.name = name;
             this.password = password;
             this.email = email;
             this.address = address;
             this.addressDetail = addressDetail;
+            this.authority = MemberRole.NORMAL;
         }
 
         public String getName() {
@@ -55,29 +53,70 @@ public class MemberDTO {
         public String getAddressDetail() {
             return addressDetail;
         }
-    }
-    
-    public static void validate(String name, String email, String password) {
-        validName(name);
-        validPassword(password);
-        validEmail(email);
-    }
 
-    private static void validName(String name) {
-        if (!Pattern.matches(REGEX_NAME, name)) {
-            throw new IllegalArgumentException(MessageFormat.format("Invalid MemberName: {0}", name));
+        public MemberRole getAuthority() {
+            return authority;
         }
     }
 
-    private static void validEmail(String email) {
-        if (!Pattern.matches(REGEX_EMAIL, email)) {
-            throw new IllegalArgumentException(MessageFormat.format("Invalid Email: {0}", email));
-        }
-    }
+    /**
+     * 멤버 조회에 대한 모델
+     * 다양한 형태일 수 있다.
+     */
+    public static class Info {
+        private long id;
+        private String name;
+        private String email;
+        private String address;
+        private String addressDetail;
+        private String createdAt;
+        private MemberRole authority;
+        private int point;
+        private String profileImage;
+        private String introduction;
 
-    private static void validPassword(String password) {
-        if (!Pattern.matches(REGEX_PASSWORD, password)) {
-            throw new IllegalArgumentException(MessageFormat.format("Invalid Password: {0}", password));
+        public Info() {
+            //
+        }
+
+        public long getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public String getAddress() {
+            return address;
+        }
+
+        public String getAddressDetail() {
+            return addressDetail;
+        }
+
+        public String getCreatedAt() {
+            return createdAt;
+        }
+
+        public MemberRole getAuthority() {
+            return authority;
+        }
+
+        public int getPoint() {
+            return point;
+        }
+
+        public String getProfileImage() {
+            return profileImage;
+        }
+
+        public String getIntroduction() {
+            return introduction;
         }
     }
 }
