@@ -12,6 +12,7 @@ public class ApiKey {
     private static final ApiKey apiKey = new ApiKey();
 
     private String kakaoOAuthSecret = "";
+    private String kakaoOAuthId = "";
 
     private ApiKey() {
         Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName());
@@ -21,6 +22,7 @@ public class ApiKey {
             properties.load(Resources.getResourceAsReader("com/config/apikey.properties"));
 
             this.kakaoOAuthSecret = properties.getProperty("kakao.oauth.secret");
+            this.kakaoOAuthId = properties.getProperty("kakao.oauth.id");
         } catch (IOException e) {
             logger.info("SET API KEY FAIL");
             e.printStackTrace();
@@ -35,4 +37,7 @@ public class ApiKey {
         return kakaoOAuthSecret;
     }
 
+    public String getKakaoOAuthId() {
+        return kakaoOAuthId;
+    }
 }

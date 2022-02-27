@@ -14,14 +14,17 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class KakaoOAuth2 implements SocialOAuth2 {
+
+    private final ApiKey key = ApiKey.getInstance();
+
     @Override
     public String getAccessToken(String authorizedCode, Object requestURL) throws IOException {
         URL url = new URL(KAKAO_AUTH);
 
         Map<String, Object> paramMap = new LinkedHashMap<>();
         paramMap.put("grant_type", "authorization_code");
-        paramMap.put("client_id", "8861433d60e2a2021bb2d209868e868c");
-        paramMap.put("client_secret", ApiKey.getInstance().getKakaoOAuthSecret());
+        paramMap.put("client_id", key.getKakaoOAuthId());
+        paramMap.put("client_secret", key.getKakaoOAuthSecret());
         paramMap.put("redirect_uri", requestURL);
         paramMap.put("code", authorizedCode);
 
@@ -29,12 +32,11 @@ public class KakaoOAuth2 implements SocialOAuth2 {
 
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
-        conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+        conn.setRequestProperty("Content-Type", X_WWW_FORM_TYPE);
         conn.setDoOutput(true);
         conn.getOutputStream().write(postData.getBytes(StandardCharsets.UTF_8));
 
         BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
-
         return SocialOAuth2.getReaderResult(br);
     }
 
@@ -43,14 +45,13 @@ public class KakaoOAuth2 implements SocialOAuth2 {
         URL url = new URL(KAKAO_INFO);
 
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestProperty("client_secret", ApiKey.getInstance().getKakaoOAuthSecret());
+        conn.setRequestProperty("client_secret", key.getKakaoOAuthSecret());
         conn.setRequestProperty("Authorization", "Bearer " + accessToken);
         conn.setDoOutput(true);
 
         BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
         String memberInfo = br.readLine().trim();
         br.close();
-
         return memberInfo;
     }
 
