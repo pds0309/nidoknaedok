@@ -1,6 +1,6 @@
 # Project exclude paths
 /out/
-/src/com/config/jdbc.properties
+/src/com/config/*.properties
 /web/images/
 /web/WEB-INF/lib/
 *.iml
