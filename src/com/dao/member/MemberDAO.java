@@ -13,11 +13,11 @@ public class MemberDAO {
         return session.insert(DIR + "signUpMember", member);
     }
 
-    public Optional<MemberDTO.Info> existCheckByName(SqlSession session, String name) {
-        return Optional.ofNullable(session.selectOne(DIR + "existCheckByName", name));
+    public Optional<MemberDTO.Info> findByName(SqlSession session, String name) {
+        return Optional.ofNullable(session.selectOne(DIR + "findByName", name));
     }
 
-    public Optional<MemberDTO.Info> existCheckByEmail(SqlSession session, String email) {
-        return Optional.ofNullable(session.selectOne(DIR + "existCheckByEmail", email));
+    public Optional<MemberDTO.Info> findByEmail(SqlSession session, String email) {
+        return Optional.ofNullable(session.selectOne(DIR + "findByEmail", email));
     }
 }
