@@ -2,6 +2,7 @@ package com.controller.ui;
 
 import com.controller.common.Cookies;
 import com.dto.oauth.KakaoUserDTO;
+import com.errors.exception.UserAccessDeniedException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.service.oauth.KakaoOAuth2;
 
@@ -18,7 +19,8 @@ public class KakaoJoinUIServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Cookie accessTokenCookie = Cookies.get(request, "_katkauta");
+        Cookie accessTokenCookie = Cookies.get(request, "_katkauta")
+                .orElseThrow(() -> new UserAccessDeniedException("인증 유효 정보가 만료되었거나 접근 권한이 없습니다."));
 
         String userInfo = new KakaoOAuth2().getMemberInfoByToken(accessTokenCookie.getValue());
         KakaoUserDTO kakaoUserDTO = new ObjectMapper().readValue(userInfo, KakaoUserDTO.class);
