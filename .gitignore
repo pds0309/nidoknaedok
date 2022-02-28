@@ -1,7 +1,11 @@
 # Project exclude paths
 /out/
-/src/com/config/*.properties
 /web/images/
 /web/WEB-INF/lib/
 *.iml
 .idea
+
+# Hide Properties
+/src/com/config/*.properties
+# Hide SQL Mapper
+/src/com/config/*Mapper.xml
