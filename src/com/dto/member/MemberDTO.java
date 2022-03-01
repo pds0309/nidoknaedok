@@ -1,6 +1,11 @@
 package com.dto.member;
 
-import com.utils.RegexValidator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+
+import javax.servlet.http.HttpSession;
+import java.io.Serializable;
 
 public class MemberDTO {
 
@@ -18,20 +23,61 @@ public class MemberDTO {
         private String email;
         private String address;
         private String addressDetail;
-        private MemberRole authority;
+        private SocialType socialType;
+        private long socialId;
 
         public SignUp() {
             //
         }
 
-        public SignUp(String name, String password, String email, String address, String addressDetail) {
-            RegexValidator.validate(name, email, password);
-            this.name = name;
-            this.password = password;
-            this.email = email;
-            this.address = address;
-            this.addressDetail = addressDetail;
-            this.authority = MemberRole.NORMAL;
+        public SignUp(Builder builder) {
+            this.name = builder.name;
+            this.password = builder.password;
+            this.email = builder.email;
+            this.address = builder.address;
+            this.addressDetail = builder.addressDetail;
+            this.socialType = builder.socialType;
+            this.socialId = builder.socialId;
+        }
+
+        public static class Builder {
+            private final String name;
+            private final String password;
+            private String email;
+            private final String address;
+            private String addressDetail = "";
+            private SocialType socialType = SocialType.NORMAL;
+            private long socialId = -1;
+
+            public Builder(String name, String password, String address) {
+                this.name = name;
+                this.password = password;
+                this.address = address;
+            }
+
+            public Builder email(String value) {
+                this.email = value;
+                return this;
+            }
+
+            public Builder addressDetail(String value) {
+                this.addressDetail = value;
+                return this;
+            }
+
+            public Builder socialType(SocialType value) {
+                this.socialType = value;
+                return this;
+            }
+
+            public Builder socialId(long value) {
+                this.socialId = value;
+                return this;
+            }
+
+            public SignUp build() {
+                return new SignUp(this);
+            }
         }
 
         public String getName() {
@@ -54,16 +100,19 @@ public class MemberDTO {
             return addressDetail;
         }
 
-        public MemberRole getAuthority() {
-            return authority;
+        public SocialType getSocialType() {
+            return socialType;
+        }
+
+        public long getSocialId() {
+            return socialId;
         }
     }
 
     /**
      * 멤버 조회에 대한 모델
-     * 다양한 형태일 수 있다.
      */
-    public static class Info {
+    public static class Info implements Serializable {
         private long id;
         private String name;
         private String email;
@@ -74,9 +123,15 @@ public class MemberDTO {
         private int point;
         private String profileImage;
         private String introduction;
+        private SocialType socialType;
+        private long socialId;
 
         public Info() {
             //
+        }
+
+        public void addSession(HttpSession session) {
+            session.setAttribute("meminfo", this);
         }
 
         public long getId() {
@@ -117,6 +172,63 @@ public class MemberDTO {
 
         public String getIntroduction() {
             return introduction;
+        }
+
+        public SocialType getSocialType() {
+            return socialType;
+        }
+
+        public long getSocialId() {
+            return socialId;
+        }
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+    public static class Update {
+        private long id;
+        private String name;
+        private String address;
+        private String addressDetail;
+        private String profileImage;
+        private String introduction;
+        private SocialType socialType;
+        private long socialId;
+
+        public Update() {
+            //
+        }
+
+        public long getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getAddress() {
+            return address;
+        }
+
+        public String getAddressDetail() {
+            return addressDetail;
+        }
+
+        public String getProfileImage() {
+            return profileImage;
+        }
+
+        public String getIntroduction() {
+            return introduction;
+        }
+
+        public SocialType getSocialType() {
+            return socialType;
+        }
+
+        public long getSocialId() {
+            return socialId;
         }
     }
 }

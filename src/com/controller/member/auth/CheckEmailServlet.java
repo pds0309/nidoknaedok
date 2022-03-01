@@ -25,7 +25,7 @@ public class CheckEmailServlet extends HttpServlet {
         String email = request.getParameter("email");
         RegexValidator.validEmail(email);
 
-        new MemberServiceImpl().validInputName(email);
+        new MemberServiceImpl().validInputEmail(email);
 
         Map<String, Object> map = new HashMap<>();
         map.put("email", email);
