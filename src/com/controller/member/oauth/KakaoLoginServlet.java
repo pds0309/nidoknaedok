@@ -63,8 +63,8 @@ public class KakaoLoginServlet extends HttpServlet {
         }
         // 기존 회원인데 카카오 OAuth 멤버가 아닌 경우
         // 연동을 묻는 화면으로 리다이렉트 시킨다.
-        info.addSession(request.getSession());
-        response.sendRedirect(request.getContextPath() + "/oauthlink");
+        request.getSession().setAttribute("memid",info.getId());
+        response.sendRedirect(request.getContextPath() + "/kakaojoin");
     }
 
     /**
