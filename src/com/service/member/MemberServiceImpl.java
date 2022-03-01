@@ -45,6 +45,16 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public Optional<MemberDTO.Info> findById(long id) {
+        SqlSession session = MySqlSessionFactory.getSession();
+        try {
+            return new MemberDAO().findById(session, id);
+        } finally {
+            session.close();
+        }
+    }
+
+    @Override
     public void validInputName(String name) {
         if (findByName(name).isPresent()) {
             throw new NotAcceptableValueException("이미 존재하는 이메일입니다");
@@ -63,7 +73,6 @@ public class MemberServiceImpl implements MemberService {
         if (member.getId() == 0) {
             throw new InvalidValueException("입력 정보가 올바르지 않습니다");
         }
-        
         SqlSession session = MySqlSessionFactory.getSession();
         int status = 0;
         try {

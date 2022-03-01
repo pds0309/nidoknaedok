@@ -21,6 +21,10 @@ public class MemberDAO {
         return Optional.ofNullable(session.selectOne(DIR + "findByEmail", email));
     }
 
+    public Optional<MemberDTO.Info> findById(SqlSession session, long id) {
+        return Optional.ofNullable(session.selectOne(DIR + "findById", id));
+    }
+
     public int updateMember(SqlSession session, MemberDTO.Update member) {
         return session.update(DIR + "updateMember", member);
     }

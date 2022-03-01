@@ -11,6 +11,8 @@ public interface MemberService {
 
     Optional<MemberDTO.Info> findByName(String name);
 
+    Optional<MemberDTO.Info> findById(long id);
+
     void validInputName(String name);
 
     void validInputEmail(String email);
