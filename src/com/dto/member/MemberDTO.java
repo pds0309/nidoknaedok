@@ -1,6 +1,8 @@
 package com.dto.member;
 
-import com.utils.RegexValidator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
@@ -111,7 +113,6 @@ public class MemberDTO {
      * 멤버 조회에 대한 모델
      */
     public static class Info implements Serializable {
-
         private long id;
         private String name;
         private String email;
@@ -163,6 +164,55 @@ public class MemberDTO {
 
         public int getPoint() {
             return point;
+        }
+
+        public String getProfileImage() {
+            return profileImage;
+        }
+
+        public String getIntroduction() {
+            return introduction;
+        }
+
+        public SocialType getSocialType() {
+            return socialType;
+        }
+
+        public long getSocialId() {
+            return socialId;
+        }
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+    public static class Update {
+        private long id;
+        private String name;
+        private String address;
+        private String addressDetail;
+        private String profileImage;
+        private String introduction;
+        private SocialType socialType;
+        private long socialId;
+
+        public Update() {
+            //
+        }
+
+        public long getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getAddress() {
+            return address;
+        }
+
+        public String getAddressDetail() {
+            return addressDetail;
         }
 
         public String getProfileImage() {
