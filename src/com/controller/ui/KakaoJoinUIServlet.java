@@ -27,6 +27,8 @@ public class KakaoJoinUIServlet extends HttpServlet {
         if (session.getAttribute("memid") == null) {
             request.getRequestDispatcher("components/kakaojoin.jsp").forward(request, response);
         } else {
+            request.setAttribute("memid", session.getAttribute("memid"));
+            session.invalidate();
             request.getRequestDispatcher("components/oauthinteg.jsp").forward(request, response);
         }
     }
