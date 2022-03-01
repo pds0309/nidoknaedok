@@ -14,4 +14,6 @@ public interface MemberService {
     void validInputName(String name);
 
     void validInputEmail(String email);
+
+    int updateMember(MemberDTO.Update member);
 }

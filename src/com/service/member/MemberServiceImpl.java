@@ -3,6 +3,7 @@ package com.service.member;
 import com.config.MySqlSessionFactory;
 import com.dao.member.MemberDAO;
 import com.dto.member.MemberDTO;
+import com.errors.exception.InvalidValueException;
 import com.errors.exception.NotAcceptableValueException;
 import org.apache.ibatis.session.SqlSession;
 
@@ -57,4 +58,20 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
+    @Override
+    public int updateMember(MemberDTO.Update member) {
+        if (member.getId() == 0) {
+            throw new InvalidValueException("입력 정보가 올바르지 않습니다");
+        }
+        
+        SqlSession session = MySqlSessionFactory.getSession();
+        int status = 0;
+        try {
+            status = new MemberDAO().updateMember(session, member);
+            session.commit();
+        } finally {
+            session.close();
+        }
+        return status;
+    }
 }
