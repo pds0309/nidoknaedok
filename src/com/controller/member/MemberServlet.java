@@ -1,7 +1,6 @@
 package com.controller.member;
 
 import com.controller.common.Cookies;
-import com.controller.common.SendJSONResponse;
 import com.dto.member.MemberDTO;
 import com.dto.member.SocialType;
 import com.errors.exception.InvalidValueException;
@@ -9,21 +8,17 @@ import com.errors.exception.UserAccessDeniedException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.service.member.MemberService;
 import com.service.member.MemberServiceImpl;
-import com.sun.xml.internal.ws.util.StreamUtils;
 import com.utils.Constants;
 import com.utils.PwdEncoder;
 
 import javax.servlet.ServletException;
-import javax.servlet.ServletInputStream;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
@@ -61,9 +56,13 @@ public class MemberServlet extends HttpServlet {
             email = request.getParameter("email").trim();
             address = request.getParameter("address").trim();
             addressDetail = request.getParameter("addressdetail").trim();
+            if (addressDetail.length() >= 60) {
+                addressDetail = addressDetail.substring(0,60);
+            }
             signType = request.getParameter("signType");
             password = PwdEncoder.encrypt(password);
         } catch (NullPointerException e) {
+            e.printStackTrace();
             throw new InvalidValueException("회원등록 입력 정보 누락 식별");
         } catch (NoSuchAlgorithmException e) {
             InvalidValueException ex = new InvalidValueException("일부 입력 데이터 처리에 실패해 회원등록 실패");
@@ -89,7 +88,9 @@ public class MemberServlet extends HttpServlet {
         Map<String, String> map = new HashMap<>();
         map.put("result", String.valueOf(status));
         map.put("message", "회원 가입 성공!");
-        SendJSONResponse.sendAsJson(response, map, 201);
+        request.setAttribute("result", map);
+        request.setAttribute("destination", "home");
+        request.getRequestDispatcher("components/Alert.jsp").forward(request, response);
     }
 
     /**
@@ -115,9 +116,10 @@ public class MemberServlet extends HttpServlet {
         Map<String, String> map = new HashMap<>();
         map.put("result", String.valueOf(status));
         map.put("message", "회원 수정 성공!");
-
         memberService.findById(updateDTO.getId()).get().addSession(request.getSession());
-        SendJSONResponse.sendAsJson(response, map, 201);
+        request.setAttribute("result", map);
+        request.setAttribute("destination", "home");
+        request.getRequestDispatcher("components/Alert.jsp").forward(request, response);
     }
 
     /**
