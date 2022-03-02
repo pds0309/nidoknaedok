@@ -45,10 +45,8 @@ export const sample6_execDaumPostcode = (validation) => {
             if (validation !== undefined) {
                 if (state === 'COMPLETE_CLOSE') {
                     // 해당 모듈을 호출한 곳에 주소 입력이 성공했다는 상태를 넣는다.
-                    validation.push(addr);
-                }
-                else {
-                    validation.pop(addr);
+                    validation.popContains("address:");
+                    validation.push("address:" + addr);
                 }
             }
         }
