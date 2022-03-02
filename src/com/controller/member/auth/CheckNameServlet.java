@@ -1,6 +1,6 @@
 package com.controller.member.auth;
 
-import com.controller.common.SendJSONResponse;
+import com.controller.common.JSONResponse;
 
 import com.service.member.MemberServiceImpl;
 import com.utils.RegexValidator;
@@ -30,7 +30,7 @@ public class CheckNameServlet extends HttpServlet {
 
         Map<String, Object> map = new HashMap<>();
         map.put("name", name);
-        SendJSONResponse.sendAsJson(response, map, response.getStatus());
+        JSONResponse.send(response, map, response.getStatus());
     }
 
 }

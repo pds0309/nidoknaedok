@@ -1,11 +1,14 @@
 package com.dto.member;
 
+import com.errors.exception.InvalidValueException;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.utils.PwdEncoder;
 
 import javax.servlet.http.HttpSession;
 import java.io.Serializable;
+import java.security.NoSuchAlgorithmException;
 
 public class MemberDTO {
 
@@ -229,6 +232,36 @@ public class MemberDTO {
 
         public long getSocialId() {
             return socialId;
+        }
+    }
+
+    public static class SignIn {
+        private String email;
+        private String password;
+
+        public SignIn() {
+            //
+        }
+
+        public SignIn(String email, String password) {
+            this.email = email;
+            this.password = password;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public void encPassword() {
+            try {
+                this.password = PwdEncoder.encrypt(this.password);
+            } catch (NoSuchAlgorithmException e) {
+                throw new InvalidValueException("알 수 없는 이유로 로그인 인증 실패");
+            }
         }
     }
 }

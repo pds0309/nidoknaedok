@@ -55,6 +55,16 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public Optional<MemberDTO.Info> login(MemberDTO.SignIn member) {
+        SqlSession session = MySqlSessionFactory.getSession();
+        try {
+            return new MemberDAO().findByEmailAndPassword(session, member);
+        } finally {
+            session.close();
+        }
+    }
+
+    @Override
     public void validInputName(String name) {
         if (findByName(name).isPresent()) {
             throw new NotAcceptableValueException("이미 존재하는 이메일입니다");

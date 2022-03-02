@@ -11,11 +11,11 @@ import java.io.PrintWriter;
 /**
  * 결과를 JSON 데이터로 응답하는 메소드가 있다.
  */
-public class SendJSONResponse {
+public class JSONResponse {
 
     private static final String CONTENT_TYPE = "application/json;charset=utf-8";
 
-    public static <T> void sendAsJson(HttpServletResponse response, T data, int status) throws IOException {
+    public static <T> void send(HttpServletResponse response, T data, int status) throws IOException {
         response.setContentType(CONTENT_TYPE);
         response.setStatus(status);
         PrintWriter out = response.getWriter();
@@ -23,7 +23,7 @@ public class SendJSONResponse {
         out.flush();
     }
 
-    public static void sendAsJson(HttpServletResponse response, ErrorCode errorCode) throws IOException {
+    public static void send(HttpServletResponse response, ErrorCode errorCode) throws IOException {
         response.setContentType(CONTENT_TYPE);
         response.setStatus(errorCode.getStatus());
         PrintWriter out = response.getWriter();
@@ -31,7 +31,7 @@ public class SendJSONResponse {
         out.flush();
     }
 
-    public static void sendAsJson(HttpServletResponse response, ErrorCode errorCode, String message) throws IOException {
+    public static void send(HttpServletResponse response, ErrorCode errorCode, String message) throws IOException {
         response.setContentType(CONTENT_TYPE);
         response.setStatus(errorCode.getStatus());
         PrintWriter out = response.getWriter();

@@ -28,4 +28,8 @@ public class MemberDAO {
     public int updateMember(SqlSession session, MemberDTO.Update member) {
         return session.update(DIR + "updateMember", member);
     }
+
+    public Optional<MemberDTO.Info> findByEmailAndPassword(SqlSession session, MemberDTO.SignIn member) {
+        return Optional.ofNullable(session.selectOne(DIR + "findByEmailAndPassword", member));
+    }
 }
