@@ -3,6 +3,7 @@ package com.controller.member;
 import com.controller.common.JSONResponse;
 import com.dto.member.MemberDTO;
 import com.errors.exception.InvalidValueException;
+import com.errors.exception.UserAccessDeniedException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.service.member.MemberServiceImpl;
 
@@ -13,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.file.AccessDeniedException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,7 +22,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         if (request.getHeader("referer") == null) {
-            throw new AccessDeniedException("잘못된 경로에서의 접근 식별");
+            throw new UserAccessDeniedException("잘못된 경로에서의 접근 식별");
         }
         BufferedReader bufferedReader = request.getReader();
         String read = bufferedReader.readLine();
