@@ -8,6 +8,7 @@ const navigation = document.getElementById('navigation');
 
 const pages = [
     {path: contextPath + "/", component: Home, id: "body"},
+    {path: contextPath + "/home", component: Home, id: "body"},
     {path: contextPath + "/join", component: Join, id: "body"},
     {path: contextPath + '/login', component: Login, id: "body"},
 ];

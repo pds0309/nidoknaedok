@@ -1,0 +1,26 @@
+@font-face {
+    font-family: 'KFont';
+    src:url("./images/font/KakaoOTFBold.otf") format('opentype');
+}
+
+body {
+    font-family: 'KFont';
+}
+
+.is-rounded-custom {
+    border-radius: 12px;
+}
+
+.login-kakao-btn {
+    border-width: 0;
+    padding: 11px 12px;
+    border-radius: 8px;
+    background-color: #FEE500;
+    font-stretch: normal;
+    font-style: normal;
+    color: #191919;
+}
+
+ .login-kakao-btn:hover {
+     background-color: #E5D303;
+ }
