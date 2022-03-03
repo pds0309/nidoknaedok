@@ -7,11 +7,11 @@ const Navigation = async () => {
     const signInContent =
         `<a class="navbar-item" href="${contextPath}/join">회원가입</a>`;
     const logOutContent =
-        `<a class="navbar-item" href="${contextPath}/logout">로그아웃</a>`;
+        `<a class="navbar-item" href="${contextPath}/members/logout">로그아웃</a>`;
     const myPageContent =
-        `<a class="navbar-item" href="${contextPath}/mypage">로그인됨</a>`;
+        `<a class="navbar-item" href="${contextPath}/members/mypage">로그인됨</a>`;
     const resignContent =
-        `<a class="navbar-item" href="${contextPath}/resign">탈퇴</a>`;
+        `<a class="navbar-item" href="${contextPath}/members/resign">탈퇴</a>`;
 
     let content = `${loginContent}${signInContent}`;
     if (currentUserName) {

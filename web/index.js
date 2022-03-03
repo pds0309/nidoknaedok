@@ -1,14 +1,16 @@
 import {Home} from './pages/Home.js';
 import {Join} from './pages/Join.js';
+import {Login} from './pages/Login.js';
 import {Nav} from './components/Nav.js';
 
 const root = document.getElementById('body');
 const navigation = document.getElementById('navigation');
 
 const pages = [
-    {path: contextPath + "/", component: Home},
-    {path: contextPath + "/join", component: Join},
-    // {path: contextPath + '/service', component: Login},
+    {path: contextPath + "/", component: Home, id: "body"},
+    {path: contextPath + "/home", component: Home, id: "body"},
+    {path: contextPath + "/join", component: Join, id: "body"},
+    {path: contextPath + '/login', component: Login, id: "body"},
 ];
 
 const render = async path => {
@@ -17,6 +19,7 @@ const render = async path => {
         // root.replaceChildren(await component());
         component(root);
     } catch (err) {
+        // 여기로 오면 서버의 error 페이지로 리다이렉트 될 것이다.
         console.error(err);
     }
 };
