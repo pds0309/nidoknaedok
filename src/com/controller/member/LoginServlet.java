@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,13 +21,15 @@ import java.util.Map;
 public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        if (request.getHeader("referer") == null) {
+            throw new AccessDeniedException("잘못된 경로에서의 접근 식별");
+        }
         BufferedReader bufferedReader = request.getReader();
         String read = bufferedReader.readLine();
         if (read == null || "".equals(read)) {
             throw new InvalidValueException("회원 정보 누락 식별됨");
         }
         bufferedReader.close();
-
         MemberDTO.SignIn signInDTO = null;
         try {
             signInDTO = new ObjectMapper().readValue(read, MemberDTO.SignIn.class);
@@ -41,7 +44,7 @@ public class LoginServlet extends HttpServlet {
         memberDTO.addSession(request.getSession());
 
         Map<String, String> map = new HashMap<>();
-        map.put("result", "200");
+        map.put("status", "200");
         map.put("message", "로그인 성공");
         JSONResponse.send(response, map, 200);
     }
