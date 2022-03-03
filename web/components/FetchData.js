@@ -22,3 +22,10 @@ export async function FetchData(url, method, type, data, ...els) {
         return json;
     }
 }
+
+export function OpenDataSyncGET(url) {
+    const xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("GET", url, false);
+    xmlHttp.send(null);
+    return xmlHttp.responseText;
+}
