@@ -15,15 +15,18 @@ export const Join = async (target) => {
     }
 
     const render = () => {
-        target.replaceChildren(createElement(`
+        target.replaceChildren(createElement(`<br>
         <section class="section">
-            <form method="post" action="members">
+            <form method="" action="">
                 <div class="columns">
                     <div class="column is-4 is-offset-4">
+                        <div class="has-text-centered">
+                            <h2 class="title">OOO에 참여하세요!</h2><br>
+                        </div>
                         <div class="field">
                             <label class="label">이름</label>
                             <div class="control">
-                                <input class="input" type="text" placeholder="활동이름 입력" name="${submitData.name}">
+                                <input class="input is-rounded-custom" type="text" placeholder="활동이름 입력" name="${submitData.name}">
                                 <p class="help is-danger is-hidden">2~12글자의 한글,영문,숫자를 입력해주세요</p>
                             </div>
                             <p id="id-join-name" class="help is-hidden is-link">사용 불가능한 아이디입니다.</p>
@@ -31,7 +34,7 @@ export const Join = async (target) => {
                         <div class="field">
                             <label class="label">이메일</label>
                             <div class="control has-icons-left has-icons-right">
-                                <input class="input" type="email" placeholder="이메일 입력" name="${submitData.email}">
+                                <input class="input is-rounded-custom" type="email" placeholder="이메일 입력" name="${submitData.email}">
                             <span class="icon is-small is-left">
                                 <i class="fa fa-envelope"></i>
                             </span>
@@ -43,7 +46,7 @@ export const Join = async (target) => {
                         <div class="field">
                             <label class="label">비밀번호</label>
                             <p class="control has-icons-left">
-                                <input class="input" type="password" placeholder="비밀번호 입력" name="${submitData.password}">
+                                <input class="input is-rounded-custom" type="password" placeholder="비밀번호 입력" name="${submitData.password}">
                     <span class="icon is-small is-left">
                     <i class="fas fa-lock"></i>
                     </span>
@@ -53,7 +56,7 @@ export const Join = async (target) => {
                         <div class="field">
                             <label class="label">비밀번호 확인</label>
                             <p class="control has-icons-left">
-                                <input class="input" type="password" placeholder="비밀번호 확인" name="${submitData.password_confirm}">
+                                <input class="input is-rounded-custom" type="password" placeholder="비밀번호 확인" name="${submitData.password_confirm}">
                     <span class="icon is-small is-left">
                     <i class="fas fa-lock"></i>
                     </span>
@@ -65,21 +68,21 @@ export const Join = async (target) => {
                             <div class="control">
                             <div class="columns">
                                 <div class="column">
-                                      <input class="input" type="text" id="sample6_postcode" placeholder="우편번호" readonly>                          
+                                      <input class="input is-rounded-custom" type="text" id="sample6_postcode" placeholder="우편번호" readonly>                          
                                 </div>
                                 <div class="column">
-                                      <input class="button is-info" id="id-btn-getaddr" type="button" value="우편번호 찾기"><br>
+                                      <input class="button is-info is-rounded-custom" id="id-btn-getaddr" type="button" value="우편번호 찾기"><br>
                                 </div>
                             </div>
-                            <input class="input" type="text" id="sample6_address" placeholder="주소" readonly><br>
-                            <input class="input" name="addressdetail" type="text" id="sample6_detailAddress" placeholder="상세주소">
-                            <input class="input" name="${submitData.address}" type="hidden" id="id-h-address">
+                            <input class="input is-rounded-custom" type="text" id="sample6_address" placeholder="주소" readonly><br>
+                            <input class="input is-rounded-custom" name="addressdetail" type="text" id="sample6_detailAddress" placeholder="상세주소">
+                            <input class="input is-rounded-custom" name="${submitData.address}" type="hidden" id="id-h-address">
                             <input class="is-hidden" type="text" id="sample6_extraAddress" placeholder="참고항목" readonly>
                             </div>
                         </div>
-                        <div class="field is-grouped">
+                        <div class="field">
                             <div class="control">
-                                <input type="submit" class="button is-info" value="제출"/>
+                                <input type="submit" class="button is-info is-fullwidth is-rounded-custom" value="제출"/>
                             </div>
                         </div>
                     </div>
@@ -108,7 +111,7 @@ export const Join = async (target) => {
                     nameElement.nextElementSibling.classList.add('is-hidden');
                     nameElement.classList.add('is-success');
                     (async () => {
-                        const result = await FetchData("auth/name?name=" + nameElement.value, "GET");
+                        const result = await FetchData(contextPath + "/auth/name?name=" + nameElement.value, "GET");
                         const resultElement = document.getElementById("id-join-name");
                         resultElement.classList.remove("is-hidden");
                         if (result.status === 200) {
@@ -165,7 +168,7 @@ export const Join = async (target) => {
                     document.getElementById("id-join-email").innerText = "";
                     emailElement.classList.add('is-success');
                     (async () => {
-                        const result = await FetchData("auth/email?email=" + emailElement.value, "GET");
+                        const result = await FetchData(contextPath + "/auth/email?email=" + emailElement.value, "GET");
                         const resultElement = document.getElementById("id-join-email-2");
                         resultElement.classList.remove("is-hidden");
                         if (result.status === 200) {
@@ -179,16 +182,32 @@ export const Join = async (target) => {
                 }
             });
 
-        document.querySelector('form[action="members"]')
+        document.querySelector('form')
             .addEventListener('submit', (ev) => {
+                ev.preventDefault();
                 if (validation.get.length !== 5 ||
                     validation.get.indexOf("address:" + document.getElementById("id-h-address").value) === -1) {
-                    console.log(validation.get);
                     alert("입력을 확인하세요!!");
-                    ev.preventDefault();
+                    return;
                 }
+                const request = {signType: "NORMAL"};
+                Array.from(document.querySelectorAll("input"))
+                    .filter(value => value.name !== "")
+                    .forEach(value => {
+                        request[value.name] = value.value.trim();
+                        value.value = "";
+                    });
+                (async () => {
+                    const result
+                        = await FetchData(contextPath + "/members", "POST", "application/json", JSON.stringify(request));
+                    if (result.status === 201) {
+                        window.alert(result.data.message);
+                        location.replace(contextPath + "/");
+                    } else {
+                        window.alert(result.status + "가입 실패!");
+                    }
+                })();
             });
     }
     render();
-
 };
