@@ -50,7 +50,7 @@ export const Login = async (target) => {
                 <a class="button is-blick is-large is-fullwidth is-rounded-custom">SNS2 로그인</a>
             </div>
             <p class="has-text-grey">
-              <a href="${contextPath}/joidn">회원가입</a> &nbsp;·&nbsp; <a href="#">비밀번호 찾기</a> &nbsp;·&nbsp;
+              <a href="${contextPath}/join">회원가입</a> &nbsp;·&nbsp; <a href="#">비밀번호 찾기</a> &nbsp;·&nbsp;
               <a href="#">Help?</a>
             </p>
           </div>
