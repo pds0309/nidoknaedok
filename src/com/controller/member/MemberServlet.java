@@ -1,6 +1,7 @@
 package com.controller.member;
 
 import com.controller.common.Cookies;
+import com.controller.common.JSONResponse;
 import com.dto.member.MemberDTO;
 import com.dto.member.SocialType;
 import com.errors.exception.InvalidValueException;
@@ -10,16 +11,13 @@ import com.service.member.MemberService;
 import com.service.member.MemberServiceImpl;
 import com.utils.Constants;
 import com.utils.PwdEncoder;
+import org.json.JSONObject;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -43,31 +41,33 @@ public class MemberServlet extends HttpServlet {
         if (optionalCookie.isPresent()) {
             oAuthType = checkOAuthJoin(request, optionalCookie.get());
         }
+        BufferedReader bufferedReader = request.getReader();
+        String read = bufferedReader.readLine();
+        if (read == null || "".equals(read)) {
+            throw new InvalidValueException("회원등록 입력 정보 누락 식별");
+        }
+        bufferedReader.close();
 
+        JSONObject readResult = new JSONObject(read);
         String name = "";
         String password = "";
         String email = "";
         String address = "";
         String addressDetail = "";
         String signType = "";
+
         try {
-            name = request.getParameter("name").trim();
-            password = request.getParameter("password").trim();
-            email = request.getParameter("email").trim();
-            address = request.getParameter("address").trim();
-            addressDetail = request.getParameter("addressdetail").trim();
+            name = readResult.getString("name").trim();
+            password = PwdEncoder.encrypt(readResult.getString("password").trim());
+            email = readResult.getString("email").trim();
+            address = readResult.getString("address").trim();
+            addressDetail = readResult.getString("addressdetail").trim();
             if (addressDetail.length() >= 60) {
-                addressDetail = addressDetail.substring(0,60);
+                addressDetail = addressDetail.substring(0, 60);
             }
-            signType = request.getParameter("signType");
-            password = PwdEncoder.encrypt(password);
-        } catch (NullPointerException e) {
-            e.printStackTrace();
+            signType = readResult.getString("signType");
+        } catch (Exception e) {
             throw new InvalidValueException("회원등록 입력 정보 누락 식별");
-        } catch (NoSuchAlgorithmException e) {
-            InvalidValueException ex = new InvalidValueException("일부 입력 데이터 처리에 실패해 회원등록 실패");
-            e.initCause(ex);
-            throw ex;
         }
 
         MemberDTO.SignUp.Builder memberDTO =
@@ -83,14 +83,15 @@ public class MemberServlet extends HttpServlet {
         int status = memberService.signUpMember(memberDTO.build());
 
         if (oAuthType && status == 1) {
-            memberService.findByEmail(email).get().addSession(request.getSession());
+            request.getSession().invalidate();
+            HttpSession session = request.getSession();
+            memberService.findByEmail(email).get().addSession(session);
         }
+
         Map<String, String> map = new HashMap<>();
         map.put("result", String.valueOf(status));
         map.put("message", "회원 가입 성공!");
-        request.setAttribute("result", map);
-        request.setAttribute("destination", "home");
-        request.getRequestDispatcher("components/Alert.jsp").forward(request, response);
+        JSONResponse.send(response, map, 201);
     }
 
     /**
@@ -116,10 +117,10 @@ public class MemberServlet extends HttpServlet {
         Map<String, String> map = new HashMap<>();
         map.put("result", String.valueOf(status));
         map.put("message", "회원 수정 성공!");
-        memberService.findById(updateDTO.getId()).get().addSession(request.getSession());
-        request.setAttribute("result", map);
-        request.setAttribute("destination", "home");
-        request.getRequestDispatcher("components/Alert.jsp").forward(request, response);
+        request.getSession().invalidate();
+        HttpSession session = request.getSession();
+        memberService.findById(updateDTO.getId()).get().addSession(session);
+        JSONResponse.send(response, map, 201);
     }
 
     /**
