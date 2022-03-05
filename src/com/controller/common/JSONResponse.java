@@ -23,11 +23,11 @@ public class JSONResponse {
         out.flush();
     }
 
-    public static void send(HttpServletResponse response, ErrorCode errorCode) throws IOException {
+    public static void send(HttpServletResponse response, ErrorResponse errorResponse) throws IOException {
         response.setContentType(CONTENT_TYPE);
-        response.setStatus(errorCode.getStatus());
+        response.setStatus(errorResponse.getStatus());
         PrintWriter out = response.getWriter();
-        out.print(ResponseDTO.toJson(ErrorResponse.of(errorCode)));
+        out.print(ResponseDTO.toJson(errorResponse));
         out.flush();
     }
 

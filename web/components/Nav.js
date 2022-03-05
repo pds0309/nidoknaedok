@@ -18,10 +18,13 @@ export function Nav(render) {
             return;
         }
 
-        const currentSession = JSON.parse(OpenDataSyncGET("session?name=meminfo")).data.result;
-        if (sessionTrace.get !== currentSession) {
-            location.replace(contextPath + "/");
+        if (sessionTrace === "YES") {
+            const currentSession = JSON.parse(OpenDataSyncGET(contextPath + "/session?name=meminfo")).data.result;
+            if (sessionTrace.get !== currentSession) {
+                location.replace(contextPath + "/");
+            }
         }
+
         ev.preventDefault();
         if (path !== window.location.pathname) {
             let previusHistoryURL;

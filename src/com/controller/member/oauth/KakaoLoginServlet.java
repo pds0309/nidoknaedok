@@ -1,6 +1,7 @@
 package com.controller.member.oauth;
 
 import com.config.openapi.ApiKey;
+import com.controller.common.Cookies;
 import com.dto.member.MemberDTO;
 import com.errors.exception.UserAccessDeniedException;
 import com.service.member.MemberService;
@@ -54,10 +55,8 @@ public class KakaoLoginServlet extends HttpServlet {
         MemberDTO.Info info =
                 memberService.findByEmail(memberObject.getJSONObject("kakao_account").getString("email")).orElse(null);
         // kakao access_token 을 쿠키에 저장한다.
-        Cookie cookie = new Cookie(Constants.AUTH_COOKIE_NAME, tokenObject.getString("access_token"));
-        cookie.setPath("/");
-        cookie.setMaxAge(Constants.AUTH_COOKIE_TIMEOUT);
-        response.addCookie(cookie);
+        Cookies.add(Constants.AUTH_COOKIE_NAME, tokenObject.getString("access_token"),
+                Constants.AUTH_COOKIE_TIMEOUT, response);
         // 신규 등록 회원이면 부가 정보를 위해 가입 페이지로 이동시킨다.
         if (info == null) {
             response.sendRedirect(request.getContextPath() + "/kakaojoin");
@@ -65,7 +64,7 @@ public class KakaoLoginServlet extends HttpServlet {
         }
         // 이메일 검사
         // 기존 카카오 OAuth 멤버면 로그인을 시킨다.
-        cookie.setMaxAge(Constants.NORMAL_COOKIE_TIMEOUT);
+
         if ("kakao".equals(info.getSocialType().getName()) && memberObject.getLong("id") == info.getSocialId()) {
             info.addSession(request.getSession());
             response.sendRedirect(request.getContextPath() + "/home");

@@ -30,38 +30,51 @@ public class GlobalExceptionHandleServlet extends HttpServlet {
 
         Throwable exception = (Throwable) request.getAttribute("javax.servlet.error.exception");
         ErrorCode errorCode;
-
         if (exception == null) {
             errorCode = ErrorCode.NOT_FOUND;
             logger.error(MessageFormat.format("{0}", errorCode));
-            request.setAttribute("errorResponse", ErrorResponse.of(errorCode));
-            request.getRequestDispatcher("error.jsp").forward(request, response);
+            request.setAttribute("errorinfo", ErrorResponse.of(errorCode));
+            request.getRequestDispatcher("pages/error.jsp").forward(request, response);
             return;
         }
+
+        ErrorResponse errorResponse = null;
 
         if (exception instanceof UpperCustomException) {
             errorCode = ((UpperCustomException) (exception)).getErrorCode();
-            logger.error(MessageFormat.format("{0}:{1}", errorCode, exception.getMessage()));
-            JSONResponse.send(response, errorCode, exception.getMessage());
-            return;
-        }
+            errorResponse = ErrorResponse.of(errorCode, exception.getMessage());
 
-        if (exception instanceof PersistenceException) {
+        } else if (exception instanceof PersistenceException) {
             errorCode = ErrorCode.DATA_SERVICE_UNAVAILABLE;
-            logger.error(MessageFormat.format("{0}:{1}", errorCode, exception.getMessage()));
-            JSONResponse.send(response, errorCode, "데이터 요청 처리에 실패했습니다");
-            return;
+            errorResponse = ErrorResponse.of(errorCode);
+
+        } else {
+            errorCode = ErrorCode.INTERNA_SERVER_ERROR;
+            errorResponse = ErrorResponse.of(errorCode);
         }
 
-        if (exception instanceof Exception) {
-            errorCode = ErrorCode.INTERNA_SERVER_ERROR;
-            logger.error(MessageFormat.format("{0}:{1}", errorCode, exception.getMessage()));
-            JSONResponse.send(response, errorCode, "서버 내부 에러입니다");
-        }
+        logger.error(MessageFormat.format("{0}:{1}", errorCode, exception.getMessage()));
+        showError(request, response, errorResponse);
+
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request, response);
     }
+
+    /**
+     * 요청 형태에 따라 예외를 다른 방식으로 응답한다.
+     *
+     * @param errorResponse
+     */
+    private void showError(HttpServletRequest request, HttpServletResponse response, ErrorResponse errorResponse) throws IOException, ServletException {
+        if (request.getAttribute("url") == null) {
+            JSONResponse.send(response, errorResponse);
+            return;
+        }
+        request.setAttribute("errorinfo", errorResponse);
+        request.getRequestDispatcher("pages/error.jsp").forward(request, response);
+    }
+
 }
