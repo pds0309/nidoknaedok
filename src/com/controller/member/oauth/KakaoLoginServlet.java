@@ -2,12 +2,15 @@ package com.controller.member.oauth;
 
 import com.config.openapi.ApiKey;
 import com.dto.member.MemberDTO;
+import com.errors.exception.UserAccessDeniedException;
 import com.service.member.MemberService;
 import com.service.member.MemberServiceImpl;
 import com.service.oauth.KakaoOAuth2;
 import com.service.oauth.SocialOAuth2;
 import com.utils.Constants;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,6 +23,7 @@ import java.util.Map;
 public class KakaoLoginServlet extends HttpServlet {
     private static final SocialOAuth2 oauth2 = new KakaoOAuth2();
     private final MemberService memberService = new MemberServiceImpl();
+    private final Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     /**
      * /members/kakao
@@ -31,7 +35,13 @@ public class KakaoLoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String code = request.getParameter("code");
-        JSONObject tokenObject = new JSONObject(oauth2.getAccessToken(code, request.getRequestURL()));
+        JSONObject tokenObject = null;
+        try {
+            tokenObject = new JSONObject(oauth2.getAccessToken(code, request.getRequestURL()));
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw new UserAccessDeniedException("잘못된 접근입니다");
+        }
         // 이메일 수집 동의 여부를 체크한다.
         if (userNotCheckedEmailScope(tokenObject.getString("scope"))) {
             emailConsent(request, response);
@@ -63,8 +73,8 @@ public class KakaoLoginServlet extends HttpServlet {
         }
         // 기존 회원인데 카카오 OAuth 멤버가 아닌 경우
         // 연동을 묻는 화면으로 리다이렉트 시킨다.
-        request.getSession().setAttribute("memid",info.getId());
-        response.sendRedirect(request.getContextPath() + "/kakaojoin");
+        request.getSession().setAttribute("memid", info.getId());
+        response.sendRedirect(request.getContextPath() + "/kakaointeg");
     }
 
     /**
