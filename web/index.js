@@ -20,7 +20,7 @@ const render = async path => {
         const p = pages.find(page => page.path === path);
         let component;
         if (!p) {
-            component = NotFound;
+            window.location.href = contextPath + "/error";
         } else {
             component = p.component;
         }
@@ -30,7 +30,6 @@ const render = async path => {
             component(root);
         }
     } catch (err) {
-        // 여기로 오면 서버의 error 페이지로 리다이렉트 될 것이다.
         console.error(err);
     }
 };
