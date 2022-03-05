@@ -9,12 +9,14 @@
     </settings>
     <typeAliases>
         <typeAlias type="com.dto.member.MemberDTO" alias="MemberDTO"/>
+        <typeAlias type="com.config.mybatis.SocialTypeEnumHandler" alias="SocialTypeEnumHandler"/>
     </typeAliases>
     <typeHandlers>
         <typeHandler
                 javaType="java.lang.String"
                 jdbcType="NVARCHAR"
                 handler="com.config.mybatis.NVarcharTypeHandler"/>
+        <typeHandler handler="com.config.mybatis.SocialTypeEnumHandler"/>
     </typeHandlers>
     <environments default="development">
         <environment id="development">
