@@ -16,7 +16,23 @@
     const contextPath = '${contextpath}';
     const currentUserName = '${meminfo.getName()}';
 </script>
+<c:if test="${not empty kakaoinfo}">
+    <c:set var="info" value="${kakaoinfo}"/>
+    <c:set var="name" value="KAKAO"/>
+    <script type="module">
+        import {OAuthInfo} from "./components/OAuthInfo.js";
+        import {OAuthJoin} from "./pages/OAuthJoin.js";
 
+        const name = '${name}';
+        const info = {
+            social_id: '${info.id}',
+            name: '${info.properties.nickname}',
+            profile_image: '${info.properties.thumbnailImage}',
+            email: '${info.kakaoAccount.email}',
+        }
+        OAuthInfo(OAuthJoin, name).set(info);
+    </script>
+</c:if>
 <body>
 <nav id="navigation" class="navbar is-info"></nav>
 <div class="container">

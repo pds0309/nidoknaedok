@@ -2,6 +2,13 @@ import {createElement} from '../utils/component.js';
 import {Validation} from "../components/Validation.js";
 import {sample6_execDaumPostcode} from "../utils/daumemail.js";
 import {FetchData} from "../components/FetchData.js";
+import {
+    checkPasswordConfirm,
+    emailValidator,
+    nameValidator,
+    passwordConfirmValidator,
+    passwordValidator
+} from "../utils/inputValidator.js";
 
 export const Join = async (target) => {
 
@@ -29,7 +36,7 @@ export const Join = async (target) => {
                                 <input class="input is-rounded-custom" type="text" placeholder="활동이름 입력" name="${submitData.name}">
                                 <p class="help is-danger is-hidden">2~12글자의 한글,영문,숫자를 입력해주세요</p>
                             </div>
-                            <p id="id-join-name" class="help is-hidden is-link">사용 불가능한 아이디입니다.</p>
+                            <p id="id-join-name" class="help is-link"></p>
                         </div>
                         <div class="field">
                             <label class="label">이메일</label>
@@ -82,7 +89,7 @@ export const Join = async (target) => {
                         </div>
                         <div class="field">
                             <div class="control">
-                                <input type="submit" class="button is-info is-fullwidth is-rounded-custom" value="제출"/>
+                                <input type="submit" class="button is-info is-fullwidth is-rounded-custom" value="가입하기"/>
                             </div>
                         </div>
                     </div>
@@ -98,90 +105,12 @@ export const Join = async (target) => {
             .addEventListener("click", () => {
                 sample6_execDaumPostcode(validation)
             });
-        document.querySelector('input[name="name"]')
-            .addEventListener('blur', (ev) => {
-                const nameElement = ev.target;
-                // 정규식도 그냥 한번 더 검증해 서버의 부하를 줄이자
-                let nameRegex = /^[가-힣A-Za-z0-9]{2,12}$/;
-                if (nameElement.value === '' || !nameRegex.test(nameElement.value)) {
-                    nameElement.nextElementSibling.classList.remove('is-hidden');
-                    nameElement.classList.remove('is-success');
-                    validation.pop(submitData.name);
-                } else {
-                    nameElement.nextElementSibling.classList.add('is-hidden');
-                    nameElement.classList.add('is-success');
-                    (async () => {
-                        const result = await FetchData(contextPath + "/auth/name?name=" + nameElement.value, "GET");
-                        const resultElement = document.getElementById("id-join-name");
-                        resultElement.classList.remove("is-hidden");
-                        if (result.status === 200) {
-                            resultElement.innerText = "사용가능한 아이디 입니다";
-                            validation.push(submitData.name);
-                        } else {
-                            resultElement.innerText = "사용 불가능한 아이디 입니다";
-                            nameElement.classList.remove('is-success');
-                            validation.pop(submitData.name);
-                        }
-                    })();
-                }
-            });
 
-        document.querySelector('input[name=password]')
-            .addEventListener('blur', (ev) => {
-                let passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,20}$/;
-                if (!passwordRegex.test(ev.target.value)) {
-                    document.getElementById("id-join-pwd").className = "help is-danger";
-                    ev.target.classList.remove('is-success');
-                    validation.pop(submitData.password);
-                } else {
-                    document.getElementById("id-join-pwd").className = "help is-success";
-                    ev.target.classList.add('is-success');
-                    validation.push(submitData.password);
-                }
-            });
-
-        document.querySelector('input[name=password_confirm]')
-            .addEventListener('blur', (ev) => {
-                const password = document.querySelector('input[name="password"]').value;
-                const pwdConfirmElement = ev.target;
-                if (pwdConfirmElement.value === "" || password !== pwdConfirmElement.value) {
-                    document.getElementById("id-join-pwdcheck").className = "help is-danger";
-                    pwdConfirmElement.classList.remove('is-success');
-                    validation.pop(submitData.password_confirm);
-                } else {
-                    document.getElementById("id-join-pwdcheck").className = "help is-success";
-                    pwdConfirmElement.classList.add('is-success');
-                    validation.push(submitData.password_confirm);
-                }
-            });
-
-        document.querySelector('input[name=email]')
-            .addEventListener('blur', (ev) => {
-                const emailElement = ev.target;
-                const emailRegex = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
-                if (!emailRegex.test(emailElement.value)) {
-                    document.getElementById("id-join-email").innerText = "이메일 형식을 확인하세요";
-                    document.getElementById("id-join-email-2").innerText = "";
-                    ev.target.classList.remove('is-success');
-                    validation.pop(submitData.email);
-                } else {
-                    document.getElementById("id-join-email").innerText = "";
-                    emailElement.classList.add('is-success');
-                    (async () => {
-                        const result = await FetchData(contextPath + "/auth/email?email=" + emailElement.value, "GET");
-                        const resultElement = document.getElementById("id-join-email-2");
-                        resultElement.classList.remove("is-hidden");
-                        if (result.status === 200) {
-                            resultElement.innerText = "사용 가능한 이메일 주소입니다.";
-                            validation.push(submitData.email);
-                        } else {
-                            resultElement.innerText = "이미 존재하는 이메일 주소입니다.";
-                            validation.pop(submitData.email);
-                        }
-                    })();
-                }
-            });
-
+        nameValidator('input[name=name]', validation, submitData.name);
+        emailValidator('input[name=email]', validation, submitData.email);
+        passwordValidator('input[name=password]', validation, submitData.password);
+        passwordConfirmValidator('input[name=password_confirm]', validation, 'input[name=password]', submitData.password_confirm);
+        checkPasswordConfirm('input[name=password_confirm]', 'input[name=password]')
         document.querySelector('form')
             .addEventListener('submit', (ev) => {
                 ev.preventDefault();

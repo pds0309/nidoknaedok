@@ -1,6 +1,5 @@
 package com.controller.common;
 
-import com.errors.exception.UserAccessDeniedException;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +13,9 @@ public class Cookies {
     }
 
     public static Optional<Cookie> get(HttpServletRequest request, String name) {
+        if (request.getCookies() == null) {
+            return Optional.empty();
+        }
         return Arrays.stream(request.getCookies())
                 .filter(cookie -> name.equals(cookie.getName()))
                 .findFirst();

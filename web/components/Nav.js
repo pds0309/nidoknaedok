@@ -18,7 +18,7 @@ export function Nav(render) {
             return;
         }
 
-        const currentSession = JSON.parse(OpenDataSyncGET("session")).data.result;
+        const currentSession = JSON.parse(OpenDataSyncGET("session?name=meminfo")).data.result;
         if (sessionTrace.get !== currentSession) {
             location.replace(contextPath + "/");
         }

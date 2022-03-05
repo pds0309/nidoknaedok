@@ -42,14 +42,15 @@ export const Login = async (target) => {
 <!--                </div>-->
                 <button id="id-btn-login-normal" class="button is-block is-info is-large is-fullwidth is-rounded-custom">로그인</button><br />
                 <p class="subtitle is-6">SNS 계정으로 로그인하기</p>
-                <a class="button login-kakao-btn is-large is-fullwidth">
+                <button class="button login-kakao-btn is-large is-fullwidth"
+                 onclick="location.href='https://kauth.kakao.com/oauth/authorize?client_id=8861433d60e2a2021bb2d209868e868c&redirect_uri=http://localhost:8080/nidoknaedok/members/oauth/kakao&response_type=code'">
                     <img src="${contextPath}/images/service/kakaotalk_svg.svg" srcset="${contextPath}/images/service/kakaotalk_svg.svg" alt="kimg">&nbsp;
                     카카오 로그인
-                </a><br>
+                </button><br>
                 <a class="button is-blick is-large is-fullwidth is-rounded-custom">SNS2 로그인</a>
             </div>
             <p class="has-text-grey">
-              <a href="${contextPath}/joidn">회원가입</a> &nbsp;·&nbsp; <a href="#">비밀번호 찾기</a> &nbsp;·&nbsp;
+              <a href="${contextPath}/join">회원가입</a> &nbsp;·&nbsp; <a href="#">비밀번호 찾기</a> &nbsp;·&nbsp;
               <a href="#">Help?</a>
             </p>
           </div>
