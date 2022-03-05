@@ -28,6 +28,7 @@ public class MemberDTO {
         private String addressDetail;
         private SocialType socialType;
         private long socialId;
+        private String profileImage;
 
         public SignUp() {
             //
@@ -41,6 +42,7 @@ public class MemberDTO {
             this.addressDetail = builder.addressDetail;
             this.socialType = builder.socialType;
             this.socialId = builder.socialId;
+            this.profileImage = builder.profileImage;
         }
 
         public static class Builder {
@@ -50,7 +52,8 @@ public class MemberDTO {
             private final String address;
             private String addressDetail = "";
             private SocialType socialType = SocialType.NORMAL;
-            private long socialId = -1;
+            private long socialId;
+            private String profileImage;
 
             public Builder(String name, String password, String address) {
                 this.name = name;
@@ -75,6 +78,11 @@ public class MemberDTO {
 
             public Builder socialId(long value) {
                 this.socialId = value;
+                return this;
+            }
+
+            public Builder profileImage(String value) {
+                this.profileImage = value;
                 return this;
             }
 
@@ -109,6 +117,10 @@ public class MemberDTO {
 
         public long getSocialId() {
             return socialId;
+        }
+
+        public String getProfileImage() {
+            return profileImage;
         }
     }
 
@@ -232,6 +244,10 @@ public class MemberDTO {
 
         public long getSocialId() {
             return socialId;
+        }
+
+        public void setProfileImage(String profileImage) {
+            this.profileImage = profileImage;
         }
     }
 

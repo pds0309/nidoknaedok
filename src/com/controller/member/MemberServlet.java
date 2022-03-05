@@ -1,6 +1,5 @@
 package com.controller.member;
 
-import com.controller.common.Cookies;
 import com.controller.common.JSONResponse;
 import com.dto.member.MemberDTO;
 import com.dto.member.SocialType;
@@ -9,7 +8,6 @@ import com.errors.exception.UserAccessDeniedException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.service.member.MemberService;
 import com.service.member.MemberServiceImpl;
-import com.utils.Constants;
 import com.utils.PwdEncoder;
 import org.json.JSONObject;
 
@@ -20,7 +18,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @WebServlet("/members")
 public class MemberServlet extends HttpServlet {
@@ -36,11 +33,6 @@ public class MemberServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         validReferer(request, "join");
 
-        Optional<Cookie> optionalCookie = Cookies.get(request, Constants.AUTH_COOKIE_NAME);
-        boolean oAuthType = false;
-        if (optionalCookie.isPresent()) {
-            oAuthType = checkOAuthJoin(request, optionalCookie.get());
-        }
         BufferedReader bufferedReader = request.getReader();
         String read = bufferedReader.readLine();
         if (read == null || "".equals(read)) {
@@ -70,19 +62,22 @@ public class MemberServlet extends HttpServlet {
             throw new InvalidValueException("회원등록 입력 정보 누락 식별");
         }
 
-        MemberDTO.SignUp.Builder memberDTO =
-                new MemberDTO.SignUp.Builder(name, password, address)
-                        .email(email)
-                        .addressDetail(addressDetail);
+        MemberDTO.SignUp.Builder memberDTO = new MemberDTO.SignUp.Builder(name, password, address)
+                .email(email)
+                .addressDetail(addressDetail)
+                .socialType(SocialType.valueOf(signType));
 
-        if (oAuthType) {
+        boolean isNormal = signType.equals(SocialType.NORMAL.getName().toUpperCase());
+        if (!isNormal) {
             memberDTO.socialType(SocialType.valueOf(signType))
-                    .socialId(Long.parseLong(request.getParameter("kid")));
+                    .profileImage(readResult.getString("profile_image"))
+                    .socialId(readResult.getLong("social_id"))
+                    .build();
         }
 
         int status = memberService.signUpMember(memberDTO.build());
 
-        if (oAuthType && status == 1) {
+        if (!isNormal && status == 1) {
             request.getSession().invalidate();
             HttpSession session = request.getSession();
             memberService.findByEmail(email).get().addSession(session);
@@ -123,22 +118,6 @@ public class MemberServlet extends HttpServlet {
         JSONResponse.send(response, map, 201);
     }
 
-    /**
-     * 일반 멤버 가입인지 OAuth 멤버 가입인지 검증
-     *
-     * @return: true: OAuth 형태로 멤버 가입
-     */
-    private boolean checkOAuthJoin(HttpServletRequest request, Cookie cookie) {
-        String paramToken = request.getParameter("oauth2");
-
-        if (paramToken == null || "".equals(paramToken)) {
-            return false;
-        }
-        if (!cookie.getValue().equals(paramToken)) {
-            throw new UserAccessDeniedException("가입 도중 잘못된 접근 식별됨");
-        }
-        return true;
-    }
 
     /**
      * 멤버등록을 요청한 위치는 반드시 로그인 경로여야함을 검증한다
