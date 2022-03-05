@@ -33,8 +33,8 @@ public class GlobalExceptionHandleServlet extends HttpServlet {
         if (exception == null) {
             errorCode = ErrorCode.NOT_FOUND;
             logger.error(MessageFormat.format("{0}", errorCode));
-            request.setAttribute("errorResponse", ErrorResponse.of(errorCode));
-            request.getRequestDispatcher(request.getContextPath() + "/pages/error.jsp").forward(request, response);
+            request.setAttribute("errorinfo", ErrorResponse.of(errorCode));
+            request.getRequestDispatcher("pages/error.jsp").forward(request, response);
             return;
         }
 
@@ -74,7 +74,7 @@ public class GlobalExceptionHandleServlet extends HttpServlet {
             return;
         }
         request.setAttribute("errorinfo", errorResponse);
-        request.getRequestDispatcher(request.getContextPath() + "/pages/error.jsp").forward(request, response);
+        request.getRequestDispatcher("pages/error.jsp").forward(request, response);
     }
 
 }
