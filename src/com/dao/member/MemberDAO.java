@@ -32,4 +32,8 @@ public class MemberDAO {
     public Optional<MemberDTO.Info> findByEmailAndPassword(SqlSession session, MemberDTO.SignIn member) {
         return Optional.ofNullable(session.selectOne(DIR + "findByEmailAndPassword", member));
     }
+
+    public int deleteMember(SqlSession session, MemberDTO.Delete member) {
+        return session.delete(DIR + "deleteMember", member);
+    }
 }
