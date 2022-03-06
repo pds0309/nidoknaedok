@@ -107,7 +107,6 @@ public class MemberServlet extends HttpServlet {
         bufferedReader.close();
 
         MemberDTO.Update updateDTO = new ObjectMapper().readValue(read, MemberDTO.Update.class);
-
         int status = memberService.updateMember(updateDTO);
         Map<String, String> map = new HashMap<>();
         map.put("result", String.valueOf(status));
@@ -128,5 +127,27 @@ public class MemberServlet extends HttpServlet {
         if (referer == null || !referer.contains(refererName)) {
             throw new UserAccessDeniedException("잘못된 접근 식별됨");
         }
+    }
+
+    /**
+     * /members
+     * GET
+     * 회원을 조회한다.
+     * 자기 자신 또는 다른사람을 조회할 수도 있다.
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        String name = request.getParameter("name");
+        if (name != null) {
+            //TODO 서비스 구성 시 추가됩니다.
+            return;
+        }
+
+        MemberDTO.Info member = (MemberDTO.Info) request.getSession().getAttribute("meminfo");
+        if (member == null) {
+            response.sendRedirect("home");
+            return;
+        }
+        JSONResponse.send(response, member, 200);
     }
 }
