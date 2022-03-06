@@ -110,7 +110,7 @@ public class MemberServlet extends HttpServlet {
         int status = memberService.updateMember(updateDTO);
         Map<String, String> map = new HashMap<>();
         map.put("result", String.valueOf(status));
-        map.put("message", "회원 수정 성공!");
+        map.put("message", "[회원수정] (1): 성공 (0): 실패");
         request.getSession().invalidate();
         HttpSession session = request.getSession();
         memberService.findById(updateDTO.getId()).get().addSession(session);
@@ -149,5 +149,32 @@ public class MemberServlet extends HttpServlet {
             return;
         }
         JSONResponse.send(response, member, 200);
+    }
+
+    /**
+     * /members
+     * DELETE
+     * 회원을 삭제한다.
+     */
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        BufferedReader bufferedReader = request.getReader();
+        String read = bufferedReader.readLine();
+        if (read == null || "".equals(read)) {
+            throw new InvalidValueException("회원 정보 누락 식별됨");
+        }
+        bufferedReader.close();
+
+        JSONObject result = new JSONObject(read);
+        int status = memberService.deleteMember(
+                new MemberDTO.Delete(result.getLong("id"), result.getString("password"), result.getLong("social_id")));
+
+        request.getSession().invalidate();
+
+        Map<String, String> map = new HashMap<>();
+        map.put("result", String.valueOf(status));
+        map.put("message", "[회원탈퇴] (1): 성공 (0): 실패");
+        JSONResponse.send(response, map, 200);
     }
 }
