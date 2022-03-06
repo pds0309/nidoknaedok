@@ -86,13 +86,19 @@ export const Login = async (target) => {
                             location.replace(history.state.prev);
                             return;
                         }
-                        location.replace(contextPath);
+                        location.replace(contextPath + getParameterByName("req"));
 
                     } else {
                         inputCheckElement.innerText = "아이디 또는 비밀번호를 잘못 입력했습니다";
                     }
                 })();
-            })
+            });
+
+        function getParameterByName(name) {
+            name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"), results = regex.exec(location.search);
+            return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+        }
     }
     render();
 }
