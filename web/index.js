@@ -3,6 +3,7 @@ import {Join} from './pages/Join.js';
 import {Login} from './pages/Login.js';
 import {Nav} from './components/Nav.js';
 import {OAuthJoin} from "./pages/OAuthJoin.js";
+import {Mypage} from "./pages/Mypage.js";
 
 const root = document.getElementById('body');
 const navigation = document.getElementById('navigation');
@@ -13,6 +14,7 @@ const pages = [
     {path: contextPath + "/join", component: Join, id: "body"},
     {path: contextPath + '/login', component: Login, id: "body"},
     {path: contextPath + '/kakaojoin', component: OAuthJoin, id: "body", param: "kakao"},
+    {path: contextPath + '/mypage', component: Mypage, id: "body"},
 ];
 
 const render = async path => {

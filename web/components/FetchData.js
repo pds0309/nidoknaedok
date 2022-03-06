@@ -8,19 +8,19 @@ export async function FetchData(url, method, type, data, ...els) {
         const json = await result.json();
         return json;
     }
-    if (method === 'POST') {
-        const result = await fetch(url,
-            {
-                method: method,
-                headers: {
-                    "Content-Type": type
-                },
-                body: data
-            }
-        );
-        const json = await result.json();
-        return json;
-    }
+
+    const result = await fetch(url,
+        {
+            method: method,
+            headers: {
+                "Content-Type": type
+            },
+            body: data
+        }
+    );
+    const json = await result.json();
+    return json;
+
 }
 
 export function OpenDataSyncGET(url) {
