@@ -280,4 +280,40 @@ public class MemberDTO {
             }
         }
     }
+
+    public static class Delete {
+        private long id;
+        private String password;
+        private long socialId;
+
+        public Delete() {
+            //
+        }
+
+        public Delete(long id, String password, long socialId) {
+            this.id = id;
+            this.password = encPassword(password);
+            this.socialId = socialId;
+        }
+
+        public long getId() {
+            return id;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public long getSocialId() {
+            return socialId;
+        }
+
+        public String encPassword(String password) {
+            try {
+                return PwdEncoder.encrypt(password);
+            } catch (NoSuchAlgorithmException e) {
+                throw new InvalidValueException("알 수 없는 이유로 회원 탈퇴 인증 실패");
+            }
+        }
+    }
 }
