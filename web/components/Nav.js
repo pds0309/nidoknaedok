@@ -17,8 +17,8 @@ export function Nav(render) {
         if (doNotPreventEventPages.find(page => page.path === path)) {
             return;
         }
-
-        if (sessionTrace === "YES") {
+        
+        if (sessionTrace.get === "YES") {
             const currentSession = JSON.parse(OpenDataSyncGET(contextPath + "/session?name=meminfo")).data.result;
             if (sessionTrace.get !== currentSession) {
                 location.replace(contextPath + "/");
