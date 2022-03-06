@@ -93,4 +93,17 @@ public class MemberServiceImpl implements MemberService {
         }
         return status;
     }
+
+    @Override
+    public int deleteMember(MemberDTO.Delete member) {
+        SqlSession session = MySqlSessionFactory.getSession();
+        int status = 0;
+        try {
+            status = new MemberDAO().deleteMember(session, member);
+            session.commit();
+        } finally {
+            session.close();
+        }
+        return status;
+    }
 }

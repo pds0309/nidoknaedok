@@ -20,4 +20,6 @@ public interface MemberService {
     void validInputEmail(String email);
 
     int updateMember(MemberDTO.Update member);
+
+    int deleteMember(MemberDTO.Delete member);
 }
