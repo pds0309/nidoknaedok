@@ -5,6 +5,7 @@ export function Nav(render) {
 
     const doNotPreventEventPages = [
         {name: "logout", path: contextPath + "/members/logout"},
+        {name: "booksubmit", path: contextPath + "/booksubmit"},
     ]
     const sessionTrace = CompareSession(Nav);
 
