@@ -13,6 +13,7 @@
         <typeAlias type="com.dto.book.BookDTO" alias="BookDTO"/>
         <typeAlias type="com.config.mybatis.SocialTypeEnumHandler" alias="SocialTypeEnumHandler"/>
         <typeAlias type="com.config.mybatis.BookShopStatusEnumHandler" alias="BookShopStatusEnumHandler"/>
+        <typeAlias type="com.config.mybatis.CategoryEnumHandler" alias="CategoryEnumHandler"/>
     </typeAliases>
     <typeHandlers>
         <typeHandler
@@ -21,6 +22,7 @@
                 handler="com.config.mybatis.NVarcharTypeHandler"/>
         <typeHandler handler="com.config.mybatis.SocialTypeEnumHandler"/>
         <typeHandler handler="com.config.mybatis.BookShopStatusEnumHandler"/>
+        <typeHandler handler="com.config.mybatis.CategoryEnumHandler"/>
     </typeHandlers>
     <environments default="development">
         <environment id="development">
