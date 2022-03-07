@@ -46,11 +46,12 @@ public class BookShopServlet extends HttpServlet {
         }
         BookShopDTO bookShopDTO = objectMapper.readValue(read, BookShopDTO.class);
         bookShopDTO.setBook(new BookDTO(bookApiDTO));
-        bookShopDTO.setSellerId((MemberDTO.Info) request.getSession().getAttribute("meminfo"));
+        bookShopDTO.setSellerId(((MemberDTO.Info) (request.getSession().getAttribute("meminfo"))).getId());
 
         int status = bookShopService.submit(bookShopDTO);
         Map<String, Object> map = new HashMap<>();
-        map.put("result",status);
-        JSONResponse.send(response,map,200);
+        map.put("result", status);
+        JSONResponse.send(response, map, 200);
     }
+
 }

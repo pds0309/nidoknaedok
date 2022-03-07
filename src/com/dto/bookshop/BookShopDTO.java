@@ -83,8 +83,8 @@ public class BookShopDTO {
         this.book = book;
     }
 
-    public void setSellerId(MemberDTO.Info info) {
-        this.sellerId = info.getId();
+    public void setSellerId(long id) {
+        this.sellerId = id;
     }
 
     @Override
