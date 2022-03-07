@@ -4,6 +4,7 @@ import {Login} from './pages/Login.js';
 import {Nav} from './components/Nav.js';
 import {OAuthJoin} from "./pages/OAuthJoin.js";
 import {Mypage} from "./pages/Mypage.js";
+import {BookSubmit} from "./pages/BookSubmit.js";
 
 const root = document.getElementById('body');
 const navigation = document.getElementById('navigation');
@@ -15,6 +16,7 @@ const pages = [
     {path: contextPath + '/login', component: Login, id: "body"},
     {path: contextPath + '/kakaojoin', component: OAuthJoin, id: "body", param: "kakao"},
     {path: contextPath + '/mypage', component: Mypage, id: "body"},
+    {path: contextPath + '/booksubmit', component: BookSubmit, id: "body"},
 ];
 
 const render = async path => {
@@ -27,9 +29,9 @@ const render = async path => {
             component = p.component;
         }
         if (p.param !== undefined) {
-            component(root, p.param);
+            component(document.getElementById(p.id), p.param);
         } else {
-            component(root);
+            component(document.getElementById(p.id));
         }
     } catch (err) {
         console.error(err);
@@ -38,7 +40,14 @@ const render = async path => {
 
 Nav(render);
 
+const preventPopStatePages = [
+    {name: 'kakaojoin', path: contextPath + "/kakaojoin"}
+]
+
 window.addEventListener('popstate', () => {
+    if (preventPopStatePages.find(page => page.path === window.location.pathname)) {
+        location.reload();
+    }
     console.log('[Pop State]', window.location.pathname);
     render(window.location.pathname);
 });
