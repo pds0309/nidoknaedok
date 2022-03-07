@@ -13,6 +13,8 @@ public class ApiKey {
 
     private String kakaoOAuthSecret = "";
     private String kakaoOAuthId = "";
+    private String naverApiId = "";
+    private String naverApiSecret = "";
 
     private ApiKey() {
         Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName());
@@ -23,6 +25,8 @@ public class ApiKey {
 
             this.kakaoOAuthSecret = properties.getProperty("kakao.oauth.secret");
             this.kakaoOAuthId = properties.getProperty("kakao.oauth.id");
+            this.naverApiId = properties.getProperty("naver.api.id");
+            this.naverApiSecret = properties.getProperty("naver.api.secret");
         } catch (IOException e) {
             logger.info("SET API KEY FAIL");
             e.printStackTrace();
@@ -39,5 +43,13 @@ public class ApiKey {
 
     public String getKakaoOAuthId() {
         return kakaoOAuthId;
+    }
+
+    public String getNaverApiId() {
+        return naverApiId;
+    }
+
+    public String getNaverApiSecret() {
+        return naverApiSecret;
     }
 }
