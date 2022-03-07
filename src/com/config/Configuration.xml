@@ -9,6 +9,8 @@
     </settings>
     <typeAliases>
         <typeAlias type="com.dto.member.MemberDTO" alias="MemberDTO"/>
+        <typeAlias type="com.dto.bookshop.BookShopDTO" alias="BookShopDTO"/>
+        <typeAlias type="com.dto.book.BookDTO" alias="BookDTO"/>
         <typeAlias type="com.config.mybatis.SocialTypeEnumHandler" alias="SocialTypeEnumHandler"/>
     </typeAliases>
     <typeHandlers>
@@ -31,5 +33,7 @@
     </environments>
     <mappers>
         <mapper resource="com/config/MemberMapper.xml"/>
+        <mapper resource="com/config/BookMapper.xml"/>
+        <mapper resource="com/config/BookShopMapper.xml"/>
     </mappers>
 </configuration>
