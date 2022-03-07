@@ -9,6 +9,9 @@
     <link rel="stylesheet" href="main.css">
     <script src="https://kit.fontawesome.com/54c286718e.js" crossorigin="anonymous"></script>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <title>메인페이지</title>
 </head>
 <c:set var="contextpath" value="${pageContext.request.contextPath}"/>
