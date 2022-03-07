@@ -12,10 +12,6 @@ import java.io.IOException;
 public class MyPageServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        if (request.getSession().getAttribute("meminfo") == null) {
-            response.sendRedirect(request.getContextPath()+"/login");
-            return;
-        }
         request.getRequestDispatcher("home").forward(request, response);
     }
 }
