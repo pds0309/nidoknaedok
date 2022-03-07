@@ -31,4 +31,13 @@
         <filter-name>ViewFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+    <filter>
+        <filter-name>SessoionConfirmFilter</filter-name>
+        <filter-class>com.filter.SessoionConfirmFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>SessoionConfirmFilter</filter-name>
+        <url-pattern>/mypage</url-pattern>
+        <url-pattern>/booksubmit</url-pattern>
+    </filter-mapping>
 </web-app>
