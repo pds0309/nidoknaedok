@@ -15,7 +15,7 @@ import java.sql.SQLException;
 public class CategoryEnumHandler extends BaseTypeHandler<CategoryCode> {
     @Override
     public void setNonNullParameter(PreparedStatement preparedStatement, int i, CategoryCode categoryCode, JdbcType jdbcType) throws SQLException {
-        preparedStatement.setString(i, categoryCode.name());
+        preparedStatement.setObject(i, categoryCode.name());
     }
 
     @Override
