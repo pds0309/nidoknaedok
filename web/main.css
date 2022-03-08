@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'KFont';
-    src:url("./images/font/KakaoOTFBold.otf") format('opentype');
+    src: url("./images/font/KakaoOTFBold.otf") format('opentype');
 }
 
 body {
@@ -27,10 +27,19 @@ body {
     border-radius: 4px;
 }
 
- .login-kakao-btn:hover {
-     background-color: #E5D303;
- }
+.login-kakao-btn:hover {
+    background-color: #E5D303;
+}
 
- .my-profile-image {
-     height: inherit;
- }
+.my-profile-image {
+    height: inherit;
+}
+
+.SS {
+     background-color: #00f7ff;
+    font-weight: bold;
+}
+.SB {
+    background-color: greenyellow;
+    font-weight: bold;
+}
