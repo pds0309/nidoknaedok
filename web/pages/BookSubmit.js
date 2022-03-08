@@ -18,9 +18,9 @@ export const BookSubmit = (target) => {
                             <div class="control has-text-centered">
                                 <label class="radio">
 <!--                                <input type="radio" name="sell_type_id" value="S01" disabled>&nbsp;대여요청</label>&nbsp;-->
-                                <input type="radio" name="selltype_id" value="200" checked>&nbsp;대여등록</label>&nbsp;                                                                
+                                <input type="radio" name="selltype_id" value="SB" checked>&nbsp;대여등록</label>&nbsp;                                                                
 <!--                                <input type="radio" name="sell_type_id" value="S03" disabled>&nbsp;판매요청</label>&nbsp;-->
-                                <input type="radio" name="selltype_id" value="400">&nbsp;판매등록</label>&nbsp;
+                                <input type="radio" name="selltype_id" value="SS">&nbsp;판매등록</label>&nbsp;
                             </div>
                         </div><br>
                         <div class="field">
