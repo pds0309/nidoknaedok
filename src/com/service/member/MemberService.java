@@ -22,4 +22,7 @@ public interface MemberService {
     int updateMember(MemberDTO.Update member);
 
     int deleteMember(MemberDTO.Delete member);
+
+    void validMemberResigned(MemberDTO.Info member);
+
 }
