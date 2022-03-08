@@ -45,7 +45,7 @@ public class BookShopServlet extends HttpServlet {
             bookService.submit(bookDTO);
         }
         BookShopDTO bookShopDTO = objectMapper.readValue(read, BookShopDTO.class);
-        bookShopDTO.setBook(new BookDTO(bookApiDTO));
+        bookShopDTO.setBookId(new BookDTO(bookApiDTO).getBookId());
         bookShopDTO.setSellerId(((MemberDTO.Info) (request.getSession().getAttribute("meminfo"))).getId());
 
         int status = bookShopService.submit(bookShopDTO);

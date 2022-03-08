@@ -1,7 +1,6 @@
 package com.dto.bookshop;
 
 import com.dto.book.BookDTO;
-import com.dto.member.MemberDTO;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -13,15 +12,14 @@ public class BookShopDTO {
     private long sellerId;
     private String sellerComment;
     private String sellerShort;
-    private BookDTO book;
+    private long bookId;
     private String createdAt;
     private String updatedAt;
     private String endedAt;
-    private long sellStatusId;
-    private String sellerImage;
     private int sellPrice;
-    private long selltypeId;
-    private String category;
+    private BookShopStatusCode sellStatusId;
+    private TradeCode selltypeId;
+    private CategoryCode category;
 
     public BookShopDTO() {
         //
@@ -43,8 +41,8 @@ public class BookShopDTO {
         return sellerShort;
     }
 
-    public BookDTO getBook() {
-        return book;
+    public long getBookId() {
+        return bookId;
     }
 
     public String getCreatedAt() {
@@ -59,32 +57,28 @@ public class BookShopDTO {
         return endedAt;
     }
 
-    public long getSellStatusId() {
-        return sellStatusId;
-    }
-
-    public String getSellerImage() {
-        return sellerImage;
-    }
-
     public int getSellPrice() {
         return sellPrice;
     }
 
-    public long getSelltypeId() {
+    public BookShopStatusCode getSellStatusId() {
+        return sellStatusId;
+    }
+
+    public TradeCode getSelltypeId() {
         return selltypeId;
     }
 
-    public String getCategory() {
+    public CategoryCode getCategory() {
         return category;
     }
 
-    public void setBook(BookDTO book) {
-        this.book = book;
+    public void setBookId(long bookId) {
+        this.bookId = bookId;
     }
 
-    public void setSellerId(long id) {
-        this.sellerId = id;
+    public void setSellerId(long sellerId) {
+        this.sellerId = sellerId;
     }
 
     @Override
@@ -94,15 +88,14 @@ public class BookShopDTO {
                 ", sellerId=" + sellerId +
                 ", sellerComment='" + sellerComment + '\'' +
                 ", sellerShort='" + sellerShort + '\'' +
-                ", book=" + book +
+                ", bookId=" + bookId +
                 ", createdAt='" + createdAt + '\'' +
                 ", updatedAt='" + updatedAt + '\'' +
                 ", endedAt='" + endedAt + '\'' +
-                ", sellStatusId=" + sellStatusId +
-                ", sellerImage='" + sellerImage + '\'' +
                 ", sellPrice=" + sellPrice +
-                ", sellTypeId=" + selltypeId +
-                ", category='" + category + '\'' +
+                ", sellStatusId=" + sellStatusId +
+                ", selltypeId=" + selltypeId +
+                ", category=" + category +
                 '}';
     }
 }
