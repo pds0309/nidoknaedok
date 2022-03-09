@@ -134,6 +134,7 @@ public class MemberDTO {
         private String address;
         private String addressDetail;
         private String createdAt;
+        private String resignedAt;
         private MemberRole authority;
         private int point;
         private String profileImage;
@@ -196,6 +197,10 @@ public class MemberDTO {
         public long getSocialId() {
             return socialId;
         }
+
+        public String getResignedAt() {
+            return resignedAt;
+        }
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -209,6 +214,7 @@ public class MemberDTO {
         private String introduction;
         private SocialType socialType;
         private long socialId;
+        private MemberRole authority;
 
         public Update() {
             //
@@ -244,6 +250,10 @@ public class MemberDTO {
 
         public long getSocialId() {
             return socialId;
+        }
+
+        public MemberRole getAuthority() {
+            return authority;
         }
 
         public void setProfileImage(String profileImage) {
