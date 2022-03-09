@@ -11,13 +11,14 @@ import org.apache.ibatis.session.SqlSession;
 import java.util.Optional;
 
 public class MemberServiceImpl implements MemberService {
+    private static final MemberDAO memberDAO = new MemberDAO();
 
     @Override
     public int signUpMember(MemberDTO.SignUp member) {
         SqlSession session = MySqlSessionFactory.getSession();
         int status = 0;
         try {
-            status = new MemberDAO().signUpMember(session, member);
+            status = memberDAO.signUpMember(session, member);
             session.commit();
         } finally {
             session.close();
@@ -29,7 +30,7 @@ public class MemberServiceImpl implements MemberService {
     public Optional<MemberDTO.Info> findByEmail(String email) {
         SqlSession session = MySqlSessionFactory.getSession();
         try {
-            return new MemberDAO().findByEmail(session, email);
+            return memberDAO.findByEmail(session, email);
         } finally {
             session.close();
         }
@@ -39,7 +40,7 @@ public class MemberServiceImpl implements MemberService {
     public Optional<MemberDTO.Info> findByName(String name) {
         SqlSession session = MySqlSessionFactory.getSession();
         try {
-            return new MemberDAO().findByName(session, name);
+            return memberDAO.findByName(session, name);
         } finally {
             session.close();
         }
@@ -49,7 +50,7 @@ public class MemberServiceImpl implements MemberService {
     public Optional<MemberDTO.Info> findById(long id) {
         SqlSession session = MySqlSessionFactory.getSession();
         try {
-            return new MemberDAO().findById(session, id);
+            return memberDAO.findById(session, id);
         } finally {
             session.close();
         }
@@ -59,7 +60,7 @@ public class MemberServiceImpl implements MemberService {
     public Optional<MemberDTO.Info> login(MemberDTO.SignIn member) {
         SqlSession session = MySqlSessionFactory.getSession();
         try {
-            return new MemberDAO().findByEmailAndPassword(session, member);
+            return memberDAO.findByEmailAndPassword(session, member);
         } finally {
             session.close();
         }
@@ -93,7 +94,7 @@ public class MemberServiceImpl implements MemberService {
         SqlSession session = MySqlSessionFactory.getSession();
         int status = 0;
         try {
-            status = new MemberDAO().updateMember(session, member);
+            status = memberDAO.updateMember(session, member);
             session.commit();
         } finally {
             session.close();
@@ -106,7 +107,7 @@ public class MemberServiceImpl implements MemberService {
         SqlSession session = MySqlSessionFactory.getSession();
         int status = 0;
         try {
-            status = new MemberDAO().deleteMember(session, member);
+            status = memberDAO.deleteMember(session, member);
             session.commit();
         } finally {
             session.close();
