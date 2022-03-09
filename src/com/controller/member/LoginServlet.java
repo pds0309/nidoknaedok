@@ -5,6 +5,7 @@ import com.dto.member.MemberDTO;
 import com.errors.exception.InvalidValueException;
 import com.errors.exception.UserAccessDeniedException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.service.member.MemberService;
 import com.service.member.MemberServiceImpl;
 
 import javax.servlet.ServletException;
@@ -19,6 +20,8 @@ import java.util.Map;
 
 @WebServlet("/members/login")
 public class LoginServlet extends HttpServlet {
+    private static final MemberService memberService = new MemberServiceImpl();
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         if (request.getHeader("referer") == null) {
@@ -38,8 +41,7 @@ public class LoginServlet extends HttpServlet {
         }
         signInDTO.encPassword();
 
-        MemberDTO.Info memberDTO = new MemberServiceImpl().login(signInDTO)
-                .orElseThrow(() -> new InvalidValueException("아이디 또는 비밀번호가 올바르지 않습니다"));
+        MemberDTO.Info memberDTO = memberService.login(signInDTO);
 
         memberDTO.addSession(request.getSession());
 

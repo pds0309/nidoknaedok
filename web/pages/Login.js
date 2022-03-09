@@ -89,7 +89,7 @@ export const Login = async (target) => {
                         location.replace(contextPath + getParameterByName("req"));
 
                     } else {
-                        inputCheckElement.innerText = "아이디 또는 비밀번호를 잘못 입력했습니다";
+                        inputCheckElement.innerText = result.error.detail;
                     }
                 })();
             });

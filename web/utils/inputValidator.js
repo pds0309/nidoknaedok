@@ -39,7 +39,7 @@ export const emailValidator = (selectors, validation, data) => {
             if (!emailRegex.test(emailElement.value)) {
                 document.getElementById("id-join-email").innerText = "이메일 형식을 확인하세요";
                 document.getElementById("id-join-email-2").innerText = "";
-                ev.target.classList.remove('is-success');
+                ev.target.className = 'input is-rounded-custom is-danger';
                 validation.pop(data);
             } else {
                 document.getElementById("id-join-email").innerText = "";
@@ -50,11 +50,14 @@ export const emailValidator = (selectors, validation, data) => {
                     resultElement.classList.remove("is-hidden");
                     if (result.status === 200) {
                         resultElement.innerText = "사용 가능한 이메일 주소입니다.";
+                        ev.target.className = 'input is-rounded-custom is-success';
                         validation.push(data);
-                    } else {
-                        resultElement.innerText = "이미 존재하는 이메일 주소입니다.";
-                        validation.pop(data);
+                        return;
                     }
+                    resultElement.innerText = result.error.detail;
+                    ev.target.className = 'input is-rounded-custom is-danger';
+                    validation.pop(data);
+
                 })();
             }
         });

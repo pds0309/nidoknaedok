@@ -2,7 +2,10 @@ package com.controller.member.oauth;
 
 import com.config.openapi.ApiKey;
 import com.controller.common.Cookies;
+import com.controller.common.JSONResponse;
 import com.dto.member.MemberDTO;
+import com.errors.ErrorCode;
+import com.errors.ErrorResponse;
 import com.errors.exception.UserAccessDeniedException;
 import com.service.member.MemberService;
 import com.service.member.MemberServiceImpl;
@@ -23,7 +26,7 @@ import java.util.Map;
 @WebServlet("/members/oauth/kakao")
 public class KakaoLoginServlet extends HttpServlet {
     private static final SocialOAuth2 oauth2 = new KakaoOAuth2();
-    private final MemberService memberService = new MemberServiceImpl();
+    private static final MemberService memberService = new MemberServiceImpl();
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     /**
@@ -64,10 +67,19 @@ public class KakaoLoginServlet extends HttpServlet {
         }
         // 이메일 검사
         // 기존 카카오 OAuth 멤버면 로그인을 시킨다.
-
         if ("kakao".equals(info.getSocialType().getName()) && memberObject.getLong("id") == info.getSocialId()) {
             info.addSession(request.getSession());
             response.sendRedirect(request.getContextPath() + "/home");
+            return;
+        }
+        // 이메일이 있는 사용자인데 이전에 탈퇴한 사용자라면 인증을 금지시킨다.
+        try {
+            memberService.validMemberResigned(info);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            request.setAttribute("errorinfo", ErrorResponse.of(ErrorCode.ACCESS_DENIED,
+                    e.getMessage()));
+            request.getRequestDispatcher("/pages/error.jsp").forward(request, response);
             return;
         }
         // 기존 회원인데 카카오 OAuth 멤버가 아닌 경우

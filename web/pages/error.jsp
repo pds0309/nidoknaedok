@@ -43,6 +43,7 @@
                 <br><br>
                 <div class="has-text-centered">
                     <h3 class="subtitle">['${errorinfo.code}']&nbsp;'${errorinfo.message}'</h3>
+                    <p>${errorinfo.detail}'</p>
                 </div>
                 <br>
                 <div class="field">

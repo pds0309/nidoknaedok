@@ -13,7 +13,7 @@ public interface MemberService {
 
     Optional<MemberDTO.Info> findById(long id);
 
-    Optional<MemberDTO.Info> login(MemberDTO.SignIn member);
+    MemberDTO.Info login(MemberDTO.SignIn member);
 
     void validInputName(String name);
 
@@ -22,4 +22,7 @@ public interface MemberService {
     int updateMember(MemberDTO.Update member);
 
     int deleteMember(MemberDTO.Delete member);
+
+    void validMemberResigned(MemberDTO.Info member);
+
 }
