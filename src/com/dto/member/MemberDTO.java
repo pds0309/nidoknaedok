@@ -4,6 +4,7 @@ import com.errors.exception.InvalidValueException;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.utils.Constants;
 import com.utils.PwdEncoder;
 
 import javax.servlet.http.HttpSession;
@@ -295,6 +296,7 @@ public class MemberDTO {
         private long id;
         private String password;
         private long socialId;
+        private String profileImage;
 
         public Delete() {
             //
@@ -304,6 +306,7 @@ public class MemberDTO {
             this.id = id;
             this.password = encPassword(password);
             this.socialId = socialId;
+            this.profileImage = Constants.RESIGN_MEM_PROFILE;
         }
 
         public long getId() {
@@ -316,6 +319,10 @@ public class MemberDTO {
 
         public long getSocialId() {
             return socialId;
+        }
+
+        public String getProfileImage() {
+            return profileImage;
         }
 
         public String encPassword(String password) {
