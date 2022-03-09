@@ -13,7 +13,7 @@ public interface MemberService {
 
     Optional<MemberDTO.Info> findById(long id);
 
-    Optional<MemberDTO.Info> login(MemberDTO.SignIn member);
+    MemberDTO.Info login(MemberDTO.SignIn member);
 
     void validInputName(String name);
 

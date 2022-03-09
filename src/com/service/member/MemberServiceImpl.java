@@ -57,10 +57,13 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Optional<MemberDTO.Info> login(MemberDTO.SignIn member) {
+    public MemberDTO.Info login(MemberDTO.SignIn member) {
         SqlSession session = MySqlSessionFactory.getSession();
         try {
-            return memberDAO.findByEmailAndPassword(session, member);
+            MemberDTO.Info memberDTO = memberDAO.findByEmailAndPassword(session, member)
+                    .orElseThrow(() -> new InvalidValueException("아이디 또는 비밀번호가 올바르지 않습니다"));
+            validMemberResigned(memberDTO);
+            return memberDTO;
         } finally {
             session.close();
         }
@@ -81,7 +84,7 @@ public class MemberServiceImpl implements MemberService {
     public void validInputEmail(String email) {
         Optional<MemberDTO.Info> optionalMember = findByEmail(email);
         if (optionalMember.isPresent()) {
-             validMemberResigned(optionalMember.get());
+            validMemberResigned(optionalMember.get());
             throw new NotAcceptableValueException("이미 존재하는 이메일입니다");
         }
     }
