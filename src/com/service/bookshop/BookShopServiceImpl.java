@@ -7,6 +7,9 @@ import com.dto.bookshop.BookShopVO;
 import com.dto.common.PageDTO;
 import org.apache.ibatis.session.SqlSession;
 
+import java.util.List;
+import java.util.Map;
+
 public class BookShopServiceImpl implements BookShopService {
     private static final BookShopDAO bookShopDAO = new BookShopDAO();
 
@@ -25,12 +28,22 @@ public class BookShopServiceImpl implements BookShopService {
     @Override
     public PageDTO<BookShopVO.Book> findAllPageable(int recordAmountPerPage, int currentPage) {
         SqlSession session = MySqlSessionFactory.getSession();
-        PageDTO pageDTO = null;
+        PageDTO<BookShopVO.Book> pageDTO = null;
         try {
             pageDTO = bookShopDAO.findAllWithPagination(session, currentPage, recordAmountPerPage);
         } finally {
             session.close();
         }
         return pageDTO;
+    }
+
+    @Override
+    public List<BookShopVO.Member> findAllByParams(Map<String, Object> paramMap, int recordAmountPerPage, int startPage) {
+        SqlSession session = MySqlSessionFactory.getSession();
+        try {
+            return bookShopDAO.findAllByParams(session, startPage, recordAmountPerPage, paramMap);
+        } finally {
+            session.close();
+        }
     }
 }
