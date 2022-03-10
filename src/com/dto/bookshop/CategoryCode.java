@@ -10,7 +10,7 @@ public enum CategoryCode {
     C06("철학,심리"),
     C08("만화,오락"),
     C09("영화,음반"),
-    C010("총류,전집");
+    C10("총류,전집");
 
     private final String name;
 
@@ -24,7 +24,7 @@ public enum CategoryCode {
 
     public static CategoryCode lookup(String name) {
         for (CategoryCode element : CategoryCode.values()) {
-            if (element.name == name) {
+            if (element.name.equals(name)) {
                 return element;
             }
         }
