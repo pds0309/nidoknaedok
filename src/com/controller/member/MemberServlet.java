@@ -8,6 +8,7 @@ import com.errors.exception.UserAccessDeniedException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.service.member.MemberService;
 import com.service.member.MemberServiceImpl;
+import com.utils.Constants;
 import com.utils.PwdEncoder;
 import org.json.JSONObject;
 
@@ -143,7 +144,7 @@ public class MemberServlet extends HttpServlet {
             return;
         }
 
-        MemberDTO.Info member = (MemberDTO.Info) request.getSession().getAttribute("meminfo");
+        MemberDTO.Info member = (MemberDTO.Info) request.getSession().getAttribute(Constants.CURRENT_MEMBER_SESSION_NAME);
         if (member == null) {
             response.sendRedirect("home");
             return;
