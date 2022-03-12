@@ -1,5 +1,8 @@
 package com.dto.bookshop;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum TradeCode {
     RS(100, "판매요청"),
     SB(200, "대여"),

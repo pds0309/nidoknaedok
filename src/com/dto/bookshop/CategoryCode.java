@@ -1,5 +1,8 @@
 package com.dto.bookshop;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum CategoryCode {
 
     C01("문학,인물"),
