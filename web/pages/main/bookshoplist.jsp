@@ -34,9 +34,9 @@
                     <figure class="image is-4by5">
                         <img class="p-6-desktop" src="${book.getThumbnail()}" alt="">
                     </figure>
-                    <h2 class="is-size-5-desktop is-hidden-mobile">${book.getBookTitle()}</h2>
-                    <h2 class="is-size-6-mobile is-hidden-desktop is-hidden-tablet">
-                            ${fn:substring(book.getBookTitle(),0,12)}...</h2>
+                    <a href="${contextPath}/bookshop?bookshopid=${bookshop.getBookshopId()}" class="is-size-5-desktop is-hidden-mobile is-link-custom">${book.getBookTitle()}</a>
+                    <a href="${contextPath}/bookshop?bookshopid=${bookshop.getBookshopId()}" class="is-size-6-mobile is-hidden-desktop is-hidden-tablet is-link-custom">
+                            ${fn:substring(book.getBookTitle(),0,12)}...</a>
                     <p class="is-size-6-desktop is-size-6-mobile">
                         <span style="text-align: left">[${book.getAuthor()}]&nbsp;</span>
                         <span style="text-align: right">&nbsp;
