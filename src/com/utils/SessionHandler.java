@@ -1,5 +1,6 @@
 package com.utils;
 
+import com.dto.member.MemberDTO;
 import com.errors.exception.UserAccessDeniedException;
 
 import javax.servlet.http.HttpSession;
@@ -25,5 +26,16 @@ public class SessionHandler {
             throw new UserAccessDeniedException("접근 제한된 요청입니다");
         }
         return t;
+    }
+
+    public static boolean isItMe(HttpSession session, long memberId) {
+        MemberDTO.Info memberInfo = (MemberDTO.Info) session.getAttribute(Constants.CURRENT_MEMBER_SESSION_NAME);
+        if (memberInfo == null) {
+            return false;
+        }
+        if (memberInfo.getId() == memberId) {
+            return true;
+        }
+        return false;
     }
 }
