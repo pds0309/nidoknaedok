@@ -68,9 +68,9 @@
                             </figure>
                         </div>
                         <div class="column has-text-left p-6-desktop">
-                            <a class="is-size-2-desktop is-hidden-mobile p-3"
+                            <a href="${contextPath}/bookshop?bookshopid=${bookshop.getBookshopId()}" class="is-size-2-desktop is-hidden-mobile p-3 is-link-custom"
                                style="color: #7a0bbf">${book.getBookTitle()}</a>
-                            <h2 class="is-size-6-mobile is-hidden-desktop is-hidden-tablet">${book.getBookTitle()}</h2>
+                            <a href="${contextPath}/bookshop?bookshopid=${bookshop.getBookshopId()}" class="is-size-6-mobile is-hidden-desktop is-hidden-tablet is-link-custom">${book.getBookTitle()}</a>
                             <p class="is-size-4-desktop is-size-7-mobile mb-1">
                                 <span>[${book.getAuthor()}]&nbsp;&nbsp;</span>
                                 <span>₩<fmt:formatNumber value="${bookshop.getSellPrice()}" pattern="#,###"/>&nbsp;&nbsp;</span>

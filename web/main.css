@@ -7,6 +7,10 @@ body {
     font-family: 'KFont';
 }
 
+.user-content-body {
+    font-family: Arial;
+}
+
 .is-rounded-custom {
     border-radius: 12px;
 }
@@ -42,4 +46,13 @@ body {
 .SB {
     background-color: greenyellow;
     font-weight: bold;
+}
+
+.is-link-custom {
+    color: #8912d7;
+}
+
+.is-link-custom:hover {
+    color: #900c0c;
+    cursor: pointer;
 }
