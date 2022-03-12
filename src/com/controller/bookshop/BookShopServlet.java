@@ -12,6 +12,8 @@ import com.service.book.BookService;
 import com.service.book.BookServiceImpl;
 import com.service.bookshop.BookShopService;
 import com.service.bookshop.BookShopServiceImpl;
+import com.utils.Constants;
+import com.utils.SessionHandler;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -47,7 +49,7 @@ public class BookShopServlet extends HttpServlet {
         }
         BookShopDTO bookShopDTO = objectMapper.readValue(read, BookShopDTO.class);
         bookShopDTO.setBookId(new BookDTO(bookApiDTO).getBookId());
-        bookShopDTO.setSellerId(((MemberDTO.Info) (request.getSession().getAttribute("meminfo"))).getId());
+        bookShopDTO.setSellerId(((MemberDTO.Info) (request.getSession().getAttribute(Constants.CURRENT_MEMBER_SESSION_NAME))).getId());
 
         int status = bookShopService.submit(bookShopDTO);
         Map<String, Object> map = new HashMap<>();
@@ -58,7 +60,7 @@ public class BookShopServlet extends HttpServlet {
     /**
      * 등록된 거래를 조회한다.
      * GET
-     * /bookshop
+     * /bookshop?param
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -68,6 +70,25 @@ public class BookShopServlet extends HttpServlet {
             return;
         }
         throw new InvalidValueException("거래 조회를 위한 인자가 부적절함");
+    }
+
+    /**
+     * 등록된 거래를 수정한다.
+     * PUT
+     * /bookshop
+     */
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        MemberDTO.Info sessionMember = SessionHandler.verify(request.getSession(), Constants.CURRENT_MEMBER_SESSION_NAME);
+        BufferedReader bufferedReader = request.getReader();
+        String read = bufferedReader.readLine();
+        bufferedReader.close();
+        
+        int status =
+                bookShopService.updateBookShopInfo(new ObjectMapper().readValue(read, BookShopDTO.class), sessionMember.getId());
+        Map<String, Object> map = new HashMap<>();
+        map.put("result", status);
+        JSONResponse.send(response, map, 200);
     }
 
     private boolean validParam(String param) {
