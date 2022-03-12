@@ -17,9 +17,7 @@ export const BookSubmit = (target) => {
                             <h3 class="subtitle">신청 형태</h3>
                             <div class="control has-text-centered">
                                 <label class="radio">
-<!--                                <input type="radio" name="sell_type_id" value="S01" disabled>&nbsp;대여요청</label>&nbsp;-->
                                 <input type="radio" name="selltype_id" value="SB" checked>&nbsp;대여등록</label>&nbsp;                                                                
-<!--                                <input type="radio" name="sell_type_id" value="S03" disabled>&nbsp;판매요청</label>&nbsp;-->
                                 <input type="radio" name="selltype_id" value="SS">&nbsp;판매등록</label>&nbsp;
                             </div>
                         </div><br>
@@ -227,7 +225,7 @@ export const BookSubmit = (target) => {
                 request.sell_price = document.querySelector('input[name="sell_price"]').value;
                 request.seller_short = document.querySelector('input[name="seller_short"]').value;
                 (async () => {
-                    const result = await FetchData(contextPath + "/bookshop", "POST", 'application/json', JSON.stringify(request));
+                    const result = await FetchData(contextPath + "/bookshops", "POST", 'application/json', JSON.stringify(request));
                     if (result.status === 200) {
                         location.replace(contextPath + "/");
                         return;
