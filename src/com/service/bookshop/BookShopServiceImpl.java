@@ -5,6 +5,7 @@ import com.dao.bookshop.BookShopDAO;
 import com.dto.bookshop.BookShopDTO;
 import com.dto.bookshop.BookShopVO;
 import com.dto.common.PageDTO;
+import com.errors.exception.UserAccessDeniedException;
 import com.errors.exception.UserNotFoundException;
 import org.apache.ibatis.session.SqlSession;
 
@@ -56,6 +57,26 @@ public class BookShopServiceImpl implements BookShopService {
                     .orElseThrow(() -> new UserNotFoundException("요청에 대한 거래 내역을 찾을 수 없음"));
         } finally {
             session.close();
+        }
+    }
+
+    @Override
+    public int updateBookShopInfo(BookShopDTO bookShopDTO, long sessionMemberId) {
+        validMemberId(sessionMemberId, bookShopDTO.getSellerId());
+        SqlSession session = MySqlSessionFactory.getSession();
+        int status = 0;
+        try {
+            status = bookShopDAO.updateBookShopInfo(session, bookShopDTO);
+            session.commit();
+        } finally {
+            session.close();
+        }
+        return status;
+    }
+
+    private void validMemberId(long sessionMemberId, long currentMemberId) {
+        if (sessionMemberId != currentMemberId) {
+            throw new UserAccessDeniedException("해당 작업에 대해 권한이 없습니다.");
         }
     }
 }
