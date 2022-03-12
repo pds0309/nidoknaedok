@@ -27,7 +27,6 @@ public class GlobalExceptionHandleServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         Throwable exception = (Throwable) request.getAttribute("javax.servlet.error.exception");
         ErrorCode errorCode;
         if (exception == null) {
@@ -61,6 +60,16 @@ public class GlobalExceptionHandleServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request, response);
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doGet(request,response);
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doGet(request,response);
     }
 
     /**
