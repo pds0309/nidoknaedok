@@ -24,6 +24,7 @@ public class BookShopVO {
 
     public static class Member extends Book {
         private MemberDTO.Info member;
+        private boolean itIsMe;
 
         public Member() {
 
@@ -33,5 +34,12 @@ public class BookShopVO {
             return member;
         }
 
+        public boolean isItIsMe() {
+            return itIsMe;
+        }
+
+        public void setItIsMe(boolean itIsMe) {
+            this.itIsMe = itIsMe;
+        }
     }
 }
