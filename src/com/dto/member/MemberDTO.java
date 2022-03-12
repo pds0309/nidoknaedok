@@ -148,7 +148,7 @@ public class MemberDTO {
         }
 
         public void addSession(HttpSession session) {
-            session.setAttribute("meminfo", this);
+            session.setAttribute(Constants.CURRENT_MEMBER_SESSION_NAME, this);
         }
 
         public long getId() {

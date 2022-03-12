@@ -36,4 +36,8 @@ public class BookShopDAO {
     public Optional<BookShopVO.Member> findByBookshopId(SqlSession session, long bookshopId) {
         return Optional.ofNullable(session.selectOne(DIR + "findByBookshopId", bookshopId));
     }
+
+    public int updateBookShopInfo(SqlSession session, BookShopDTO bookShopDTO) {
+        return session.update(DIR + "updateBookShopInfo", bookShopDTO);
+    }
 }
