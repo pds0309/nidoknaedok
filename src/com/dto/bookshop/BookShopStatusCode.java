@@ -1,5 +1,8 @@
 package com.dto.bookshop;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum BookShopStatusCode {
     SUBMIT(1000, "등록됨"),
     PROCESSING(2000, "거래 진행중"),
