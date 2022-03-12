@@ -5,6 +5,7 @@ import com.controller.common.JSONResponse;
 import com.dto.book.BookApiDTO;
 import com.dto.book.BookDTO;
 import com.dto.bookshop.BookShopDTO;
+import com.dto.bookshop.BookShopVO;
 import com.dto.member.MemberDTO;
 import com.errors.exception.InvalidValueException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -66,10 +67,19 @@ public class BookShopServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String bookshopId = request.getParameter("bookshopid");
         if (validParam(bookshopId)) {
-            JSONResponse.send(response, bookShopService.findByBookshopId(Long.parseLong(bookshopId)), response.getStatus());
+            BookShopVO.Member bookShop = bookShopService.findByBookshopId(Long.parseLong(bookshopId));
+            setItIsMe(request, bookShop, bookShop.getMember().getId());
+
+            JSONResponse.send(response, bookShop, response.getStatus());
             return;
         }
         throw new InvalidValueException("거래 조회를 위한 인자가 부적절함");
+    }
+
+    private void setItIsMe(HttpServletRequest request, BookShopVO.Member bookShop, long id) {
+        if (SessionHandler.isItMe(request.getSession(), id)) {
+            bookShop.setItIsMe(true);
+        }
     }
 
     /**
@@ -83,7 +93,7 @@ public class BookShopServlet extends HttpServlet {
         BufferedReader bufferedReader = request.getReader();
         String read = bufferedReader.readLine();
         bufferedReader.close();
-        
+
         int status =
                 bookShopService.updateBookShopInfo(new ObjectMapper().readValue(read, BookShopDTO.class), sessionMember.getId());
         Map<String, Object> map = new HashMap<>();
