@@ -9,6 +9,7 @@ import org.apache.ibatis.session.SqlSession;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class BookShopDAO {
     private static final String DIR = "com.config.BookShopMapper.";
@@ -30,5 +31,9 @@ public class BookShopDAO {
         paramMap.put("startPage", startPage);
         paramMap.put("perPage", perPage);
         return session.selectList(DIR + "findAllByParams", paramMap);
+    }
+
+    public Optional<BookShopVO.Member> findByBookshopId(SqlSession session, long bookshopId) {
+        return Optional.ofNullable(session.selectOne(DIR + "findByBookshopId", bookshopId));
     }
 }

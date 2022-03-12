@@ -6,6 +6,7 @@ import com.dto.book.BookApiDTO;
 import com.dto.book.BookDTO;
 import com.dto.bookshop.BookShopDTO;
 import com.dto.member.MemberDTO;
+import com.errors.exception.InvalidValueException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.service.book.BookService;
 import com.service.book.BookServiceImpl;
@@ -22,7 +23,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@WebServlet("/bookshop")
+@WebServlet("/bookshops")
 public class BookShopServlet extends HttpServlet {
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final BookService bookService = new BookServiceImpl();
@@ -54,4 +55,22 @@ public class BookShopServlet extends HttpServlet {
         JSONResponse.send(response, map, 200);
     }
 
+    /**
+     * 등록된 거래를 조회한다.
+     * GET
+     * /bookshop
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String bookshopId = request.getParameter("bookshopid");
+        if (validParam(bookshopId)) {
+            JSONResponse.send(response, bookShopService.findByBookshopId(Long.parseLong(bookshopId)), response.getStatus());
+            return;
+        }
+        throw new InvalidValueException("거래 조회를 위한 인자가 부적절함");
+    }
+
+    private boolean validParam(String param) {
+        return param != null && !"".equals(param);
+    }
 }
