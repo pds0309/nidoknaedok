@@ -5,6 +5,7 @@ import com.dao.bookshop.BookShopDAO;
 import com.dto.bookshop.BookShopDTO;
 import com.dto.bookshop.BookShopVO;
 import com.dto.common.PageDTO;
+import com.errors.exception.UserNotFoundException;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.List;
@@ -42,6 +43,17 @@ public class BookShopServiceImpl implements BookShopService {
         SqlSession session = MySqlSessionFactory.getSession();
         try {
             return bookShopDAO.findAllByParams(session, startPage, recordAmountPerPage, paramMap);
+        } finally {
+            session.close();
+        }
+    }
+
+    @Override
+    public BookShopVO.Member findByBookshopId(long bookshopId) {
+        SqlSession session = MySqlSessionFactory.getSession();
+        try {
+            return bookShopDAO.findByBookshopId(session, bookshopId)
+                    .orElseThrow(() -> new UserNotFoundException("요청에 대한 거래 내역을 찾을 수 없음"));
         } finally {
             session.close();
         }

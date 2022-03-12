@@ -13,4 +13,6 @@ public interface BookShopService {
     PageDTO<BookShopVO.Book> findAllPageable(int recordAmountPerPage, int currentPage);
 
     List<BookShopVO.Member> findAllByParams(Map<String, Object> paramMap, int recordAmountPerPage, int startPage);
+
+    BookShopVO.Member findByBookshopId(long bookshopId);
 }
