@@ -6,7 +6,6 @@ export function Nav(render) {
     const doNotPreventEventPages = [
         {name: "logout", path: contextPath + "/members/logout"},
         {name: "booksubmit", path: contextPath + "/booksubmit"},
-        {name: "bookshop", path: contextPath + "/bookshop?bookshopid="},
     ]
     const sessionTrace = CompareSession(Nav);
 
@@ -16,10 +15,10 @@ export function Nav(render) {
         }
 
         const path = ev.target.getAttribute('href');
-        if (doNotPreventEventPages.find(page => path.startsWith(page.path))) {
+        if (doNotPreventEventPages.find(page => page.path === path)) {
             return;
         }
-        
+
         if (sessionTrace.get === "YES") {
             const currentSession = JSON.parse(OpenDataSyncGET(contextPath + "/session?name=meminfo")).data.result;
             if (sessionTrace.get !== currentSession) {

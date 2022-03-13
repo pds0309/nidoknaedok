@@ -1,18 +1,20 @@
 import {createElement} from "../utils/component.js";
-import {OpenDataSyncGET} from "../components/FetchData.js";
+import {OpenDataSyncGET, FetchData} from "../components/FetchData.js";
+import {QuillEditor} from "../components/QuillEditor.js";
+import {EditorIconEvent} from "../components/EditorIconEvent.js";
 
 export const BookShop = (target) => {
-    const bookShopId = new URL(window.location).searchParams.get("bookshopid");
-    const bookshopResult = JSON.parse(OpenDataSyncGET(contextPath + "/bookshops?bookshopid=" + bookShopId + ""));
+    const currentURL = new URL(window.location);
+    const bookshopResult = JSON.parse(OpenDataSyncGET(contextPath + "/bookshops?bookshopid=" + currentURL.searchParams.get("bookshopid") + ""));
+    const bookshopBookMemberVO = bookshopResult.data;
+    const book = bookshopBookMemberVO.book;
+    const bookshop = bookshopBookMemberVO.bookShop;
+    const member = bookshopBookMemberVO.member;
     if (bookshopResult.status !== 200) {
         window.location.href = contextPath + "/error";
     }
-
     const render = () => {
-        const bookshopBookMemberVO = bookshopResult.data;
-        const book = bookshopBookMemberVO.book;
-        const bookshop = bookshopBookMemberVO.bookShop;
-        const member = bookshopBookMemberVO.member;
+
         target.replaceChildren(createElement(`            <div class="container">
                 <br>
                 <p class="is-hidden-mobile"><br><br></p>
@@ -22,7 +24,7 @@ export const BookShop = (target) => {
                         <h1 class="is-hidden subtitle is-spaced has-text-danger">거래신청하셨습니다.</h1><br>
                         <div class="columns">
                             <p class="tag is-rounded is-medium is-danger">${bookshop.sell_status_id.bookStatusDetail}</p>&nbsp;
-                            <p class="tag is-rounded is-medium is-danger">${bookshop.selltype_id.selltypeDetail}</p>&nbsp;
+                            <p class="tag is-rounded is-medium is-info">${bookshop.selltype_id.selltypeDetail}</p>&nbsp;
                             <p class="tag is-rounded is-medium is-success">${bookshop.category.name}</p>&nbsp;
                         </div><br>
                         <div class="columns">
@@ -58,7 +60,9 @@ export const BookShop = (target) => {
                                     <div class="column" style="white-space: nowrap;">
                                         <p class="subtitle">${book.bookId}</p>
                                         <p><span class="subtitle">${bookshop["sell_price"].toLocaleString('ko-KR')}</span> 원</p>
-                                        <p class="mt-5"><small>${bookshop.seller_short}</small></p>
+                                        <p class="mt-5">
+                                            <small>${bookshop.seller_short === null ? '코멘트가 없습니다' : bookshop.seller_short}</small>
+                                        </p>                                        
                                     </div>
                                 </div>
                             </div>
@@ -130,27 +134,60 @@ export const BookShop = (target) => {
                         <hr>
                     </div>
                     <div class="column is-8 is-offset-2 is-full">
-                        <h1 class="subtitle is-spaced">부가 정보</h1>
+                        <h1 class="subtitle is-spaced">게시 내용</h1>
                         <div class="columns">
                             <div class="column is-full">
-                                <div class="has-background-white-bis pl-3 pt-5 pb-5 user-content-body">
+                                <div class="has-background-white-bis pl-3 pt-5 pb-5 user-content-body ql-editor">
                                     ${bookshop.seller_comment === null ? '코멘트가 없습니다' : bookshop.seller_comment}
                                 </div>
                             </div><br>
                         </div><hr>
-                        <div class="columns is-mobile">
+                        <div class="columns is-mobile i-am-client">
                             <div class="column is-half has-text-right">
                                     <button class="button is-info is-rounded-custom">신청하기</button>
                             </div>
-                            <div class="column is-half has-text-right is-hidden">
-                                <button class="button is-info is-rounded-custom">신청취소</button>
-                        </div>
                             <div class="column is-half has-text-left">
                                 <button class="button is-rounded-custom">쪽지전송</button>
-                        </div><br>
-                        </div><hr><br>
+                            </div><br>
+                        </div>
+                        <div class="columns is-mobile i-am-trader" style="display: none">
+                            <div class="column is-half has-text-right">
+                                    <button id="id-btn-update" class="button is-info is-rounded-custom">등록수정</button>
+                            </div>
+                            <div class="column is-half has-text-left">
+                                <button id="id-btn-delete" class="button is-rounded-custom">등록취소</button>
+                            </div><br>
+                        </div>                            
+                        <div class="">
+                            <form>
+                                <br>
+                                <div id="id-div-update" class="field box is-hidden">
+                                    <h2 class="subtitle">가격&nbsp;<a class="class-update-icon">
+                                    <i class="fa-solid fa-pencil"></i></a></h2>
+                                    <input id="id-price" style="background-color: #efecec"
+                                        class="input is-rounded-custom" type="number" readonly="" value="" placeholder="${bookshop.sell_price}"><br><br>
+                                    <h2 class="subtitle">코멘트&nbsp;<a class="class-update-icon"><i
+                                                class="fa-solid fa-pencil"></i></a></h2>
+                                    <input id="id-short" style="background-color: #efecec"
+                                        class="input is-rounded-custom" type="text" readonly="" value="" 
+                                        placeholder="${bookshop.seller_short === null ? '코멘트가 없습니다' : bookshop.seller_short}"><br><br>
+                                    <h2 class="subtitle">게시 내용&nbsp;</h2>
+                                    <div id="editor" class="control has-icons-left has-icons-right" style="height: 400px"></div><br><br>
+                                        <div class="has-text-centered columns is-mobile">
+                                            <div class="column is-half">
+                                                <button class="button is-info is-rounded-custom">수정하기</button>                                            
+                                            </div>
+                                            <div id="id-btn-update-cancel" class="column">
+                                                <button class="button is-rounded-custom">수정취소</button>                                            
+                                            </div>                                            
+                                        </div>
+                                </div>
+                                <br>
+                            </form>
+                        </div>                                           
+                        <hr><br>
                     </div>
-                    <div class="column is-8 is-offset-2 is-full">
+                    <div class="column is-8 is-offset-2 is-full i-am-trader" style="display: none">
                         <h1 class="subtitle is-spaced">거래신청한 회원들이예요!</h1>
                         <small class="has-text-danger">&nbsp;※ 잠깐! 충분한 대화는 나누셨나요??</small><br>
                         <div class="columns is-mobile box">
@@ -187,7 +224,58 @@ export const BookShop = (target) => {
     }
 
     const setEvent = () => {
-        
+        QuillEditor("#editor");
+        EditorIconEvent('.class-update-icon');
+        document.querySelector('#editor .ql-editor').innerHTML = bookshop.seller_comment + "";
+
+        if (bookshopBookMemberVO.itIsMe) {
+            document.querySelectorAll('.i-am-trader')
+                .forEach(value => value.style.display = "");
+            document.querySelectorAll('.i-am-client')
+                .forEach(value => value.style.display = "none");
+        }
+
+        document.getElementById("id-btn-update")
+            .addEventListener("click", () => {
+                const updateElement = document.getElementById("id-div-update");
+                updateElement.classList.remove("is-hidden");
+            });
+
+        document.getElementById("id-btn-update-cancel")
+            .addEventListener("click", (ev) => {
+                ev.preventDefault();
+                const updateElement = document.getElementById("id-div-update");
+                updateElement.classList.add("is-hidden");
+            });
+
+        document.querySelector("form")
+            .addEventListener("submit", (ev) => {
+                ev.preventDefault();
+                const price = document.getElementById("id-price").value;
+                const short = document.getElementById("id-short").value;
+                const comment = document.querySelector('#editor .ql-editor').innerHTML + "";
+
+                if (price !== "" && parseInt(isNaN(price))) {
+                    alert("가격 입력을 확인하세요");
+                    return;
+                }
+                const request = {
+                    sell_price: parseInt(price),
+                    seller_short: short,
+                    seller_comment: comment,
+                    seller_id: member.id,
+                    bookshop_id: bookshop.bookshop_id,
+                };
+                (async () => {
+                    const result = await FetchData(contextPath + "/bookshops", "PUT", "application/json", JSON.stringify(request));
+                    if (result.status === 200) {
+                        result.data.result === 1 ? alert("수정 성공!") : alert("수정 실패");
+                        location.reload();
+                        return;
+                    }
+                    alert(result.error.message);
+                })();
+            });
     }
     render();
 };

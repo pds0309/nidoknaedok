@@ -23,7 +23,7 @@ const pages = [
 
 const render = async path => {
     try {
-        const p = pages.find(page => page.path === path);
+        const p = pages.find(page => page.path === path.split("?")[0]);
         let component;
         if (!p) {
             window.location.href = contextPath + "/error";
