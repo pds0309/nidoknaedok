@@ -1,5 +1,6 @@
 import {OpenDataSyncGET, FetchData} from "../components/FetchData.js";
 import {createElement} from "../utils/component.js";
+import {EditorIconEvent} from "../components/EditorIconEvent.js";
 
 export const Mypage = async (target) => {
     const myinfo = JSON.parse(OpenDataSyncGET(contextPath + "/members")).data;
@@ -63,18 +64,7 @@ export const Mypage = async (target) => {
     }
     const setEvent = () => {
 
-        document.querySelectorAll('.class-update-icon')
-            .forEach(value => value.addEventListener('click', (ev) => {
-                ev.preventDefault();
-                const currentBox = ev.target.parentElement.parentElement.nextElementSibling;
-                if (currentBox.readOnly) {
-                    currentBox.style.backgroundColor = 'white';
-                    currentBox.readOnly = false;
-                    return;
-                }
-                currentBox.style.backgroundColor = '#efecec';
-                currentBox.readOnly = true;
-            }));
+        EditorIconEvent('.class-update-icon');
 
         document.getElementById('id-btn-update-intro')
             .addEventListener("click", (ev) => {

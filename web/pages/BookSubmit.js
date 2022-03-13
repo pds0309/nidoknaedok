@@ -1,6 +1,7 @@
 import {createElement} from "../utils/component.js";
 import {OpenDataSyncGET, FetchData} from "../components/FetchData.js";
 import {Submission} from "../components/Submission.js";
+import {QuillEditor} from "../components/QuillEditor.js";
 
 export const BookSubmit = (target) => {
     const submission = Submission(BookSubmit);
@@ -157,30 +158,7 @@ export const BookSubmit = (target) => {
     }
 
     const setEvent = () => {
-        var toolbarOptions = [
-            ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-            ['blockquote', 'code-block'],
-
-            [{'header': 1}, {'header': 2}],               // custom button values
-            [{'list': 'ordered'}, {'list': 'bullet'}],
-            [{'script': 'sub'}, {'script': 'super'}],      // superscript/subscript
-            [{'indent': '-1'}, {'indent': '+1'}],          // outdent/indent
-            [{'direction': 'rtl'}],                         // text direction
-            [{'size': ['small', false, 'large', 'huge']}],  // custom dropdown
-            [{'header': [1, 2, 3, 4, 5, 6, false]}],
-            [{'color': ['red', 'blue', 'green', 'black', 'white', 'yello']},
-                {'background': ['red', 'blue', 'green', 'black', 'white', 'yello']}],
-            ['link'],
-            ['clean']
-        ];
-        const options = {
-            placeholder: '글을 입력해주세요',
-            theme: 'snow',
-            modules: {
-                toolbar: toolbarOptions
-            }
-        };
-        const editor = new Quill('#editor', options);
+        QuillEditor("#editor");
 
         document.getElementById("id-btn-findbook")
             .addEventListener('click', (ev) => {
