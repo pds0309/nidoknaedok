@@ -2,6 +2,7 @@ import {createElement} from "../utils/component.js";
 import {OpenDataSyncGET, FetchData} from "../components/FetchData.js";
 import {QuillEditor} from "../components/QuillEditor.js";
 import {EditorIconEvent} from "../components/EditorIconEvent.js";
+import {SubmitModal} from "../components/Modals.js";
 
 export const BookShop = (target) => {
     const currentURL = new URL(window.location);
@@ -19,6 +20,7 @@ export const BookShop = (target) => {
                 <br>
                 <p class="is-hidden-mobile"><br><br></p>
                 <div class="hero-body">
+                    <div id="id-modal-submit"></div>
                     <div class="column is-8 is-offset-2 is-full">
                         <h1 class="title is-spaced">${book.bookTitle}</h1>
                         <h1 class="is-hidden subtitle is-spaced has-text-danger">거래신청하셨습니다.</h1><br>
@@ -83,7 +85,7 @@ export const BookShop = (target) => {
                                 <div class="has-text-centered">
                                     <figure class="image is-128x128 is-inline-block">
                                         <img class="is-rounded"
-                                            src="${member.profileImage}"
+                                            src="${member.profileImage === null ? contextPath + '/images/service/kakaounknown.png' : member.profileImage}"
                                             alt="" style="height: inherit">
                                     </figure>
                                     <br><br>
@@ -144,7 +146,7 @@ export const BookShop = (target) => {
                         </div><hr>
                         <div class="columns is-mobile i-am-client">
                             <div class="column is-half has-text-right">
-                                    <button class="button is-info is-rounded-custom">신청하기</button>
+                                    <button id="id-btn-offer" class="button is-info is-rounded-custom js-modal-trigger" data-target="modal-bookshop-offer">신청하기</button>
                             </div>
                             <div class="column is-half has-text-left">
                                 <button class="button is-rounded-custom">쪽지전송</button>
@@ -233,6 +235,21 @@ export const BookShop = (target) => {
                 .forEach(value => value.style.display = "");
             document.querySelectorAll('.i-am-client')
                 .forEach(value => value.style.display = "none");
+        } else {
+            if (member.authority !== 'RESIGN') {
+                const contents = [];
+                contents.push('<p class="subtitle">메모 함께 남기기</p>')
+                contents.push('<p class="m-1 is-6 has-text-grey">상대방에게 질문, 요청사항 등을 자유롭게 남겨주세요</p>')
+                contents.push('<input type="text" name="memo" value="" class="input">');
+                contents.push(`<input type="hidden" name="bookshop_id" value=${bookshop.bookshop_id}>`);
+                contents.push(`<input type="hidden" name="authority" value=${member.authority}>`);
+                SubmitModal(document.getElementById('id-modal-submit'),
+                    'modal-bookshop-offer', contents, "구매/대출 신청", "신청하기",
+                    contextPath + "/bookshops/history", 'POST');
+            } else {
+                document.querySelectorAll('.i-am-client')
+                    .forEach(value => value.style.display = "none");
+            }
         }
 
         document.getElementById("id-btn-update")
