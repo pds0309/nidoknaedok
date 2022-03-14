@@ -74,6 +74,27 @@ public class BookShopServiceImpl implements BookShopService {
         return status;
     }
 
+    @Override
+    public PageDTO<BookShopVO.Book> findAllByMemberId(Map<String, Long> paramMap, int recordAmountPerPage, int currentPage) {
+        SqlSession session = MySqlSessionFactory.getSession();
+        try {
+            return bookShopDAO.findAllByMemberId(session, paramMap, currentPage, recordAmountPerPage);
+        } finally {
+            session.close();
+        }
+    }
+
+    @Override
+    public Map<String, Integer> findBookShopStatsByMemberId(long memberId) {
+        SqlSession session = MySqlSessionFactory.getSession();
+        try {
+            return bookShopDAO.findBookShopStatsByMemberId(session, memberId);
+        }
+        finally {
+            session.close();
+        }
+    }
+
     private void validMemberId(long sessionMemberId, long currentMemberId) {
         if (sessionMemberId != currentMemberId) {
             throw new UserAccessDeniedException("해당 작업에 대해 권한이 없습니다.");

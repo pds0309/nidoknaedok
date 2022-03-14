@@ -17,4 +17,8 @@ public interface BookShopService {
     BookShopVO.Member findByBookshopId(long bookshopId);
 
     int updateBookShopInfo(BookShopDTO bookShopDTO, long sessionMemberId);
+
+    PageDTO<BookShopVO.Book> findAllByMemberId(Map<String,Long> paramMap, int recordAmountPerPage, int currentPage);
+
+    Map<String, Integer> findBookShopStatsByMemberId(long memberId);
 }

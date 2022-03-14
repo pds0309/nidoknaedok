@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebFilter(filterName = "SessoionConfirmFilter")
-public class SessoionConfirmFilter implements Filter {
+public class SessionConfirmFilter implements Filter {
 
     @Override
     public void init(FilterConfig config) throws ServletException {

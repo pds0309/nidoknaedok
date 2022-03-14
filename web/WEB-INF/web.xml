@@ -33,11 +33,12 @@
     </filter-mapping>
     <filter>
         <filter-name>SessoionConfirmFilter</filter-name>
-        <filter-class>com.filter.SessoionConfirmFilter</filter-class>
+        <filter-class>com.filter.SessionConfirmFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>SessoionConfirmFilter</filter-name>
         <url-pattern>/mypage</url-pattern>
         <url-pattern>/booksubmit</url-pattern>
+        <url-pattern>/dashboard</url-pattern>
     </filter-mapping>
 </web-app>
