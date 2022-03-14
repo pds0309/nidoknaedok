@@ -6,13 +6,13 @@ import {EditorIconEvent} from "../components/EditorIconEvent.js";
 export const BookShop = (target) => {
     const currentURL = new URL(window.location);
     const bookshopResult = JSON.parse(OpenDataSyncGET(contextPath + "/bookshops?bookshopid=" + currentURL.searchParams.get("bookshopid") + ""));
+    if (bookshopResult.status !== 200) {
+        window.location.href = contextPath + "/error";
+    }
     const bookshopBookMemberVO = bookshopResult.data;
     const book = bookshopBookMemberVO.book;
     const bookshop = bookshopBookMemberVO.bookShop;
     const member = bookshopBookMemberVO.member;
-    if (bookshopResult.status !== 200) {
-        window.location.href = contextPath + "/error";
-    }
     const render = () => {
 
         target.replaceChildren(createElement(`            <div class="container">
