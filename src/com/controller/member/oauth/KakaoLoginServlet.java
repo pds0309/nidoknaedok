@@ -69,7 +69,8 @@ public class KakaoLoginServlet extends HttpServlet {
         // 기존 카카오 OAuth 멤버면 로그인을 시킨다.
         if ("kakao".equals(info.getSocialType().getName()) && memberObject.getLong("id") == info.getSocialId()) {
             info.addSession(request.getSession());
-            response.sendRedirect(request.getContextPath() + "/home");
+            Cookie cookie = Cookies.get(request, "req").orElse(null);
+            response.sendRedirect(request.getContextPath() + "/" + (cookie == null ? "home" : cookie.getValue()));
             return;
         }
         // 이메일이 있는 사용자인데 이전에 탈퇴한 사용자라면 인증을 금지시킨다.
