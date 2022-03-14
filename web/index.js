@@ -6,6 +6,7 @@ import {OAuthJoin} from "./pages/OAuthJoin.js";
 import {Mypage} from "./pages/Mypage.js";
 import {BookSubmit} from "./pages/BookSubmit.js";
 import {BookShop} from "./pages/BookShop.js";
+import {Dashboard} from "./pages/Dashboard.js";
 
 const root = document.getElementById('body');
 const navigation = document.getElementById('navigation');
@@ -19,6 +20,7 @@ const pages = [
     {path: contextPath + '/mypage', component: Mypage, id: "body"},
     {path: contextPath + '/booksubmit', component: BookSubmit, id: "body"},
     {path: contextPath + '/bookshop', component: BookShop, id: "body"},
+    {path: contextPath + '/dashboard', component: Dashboard, id: "body"},
 ];
 
 const render = async path => {
