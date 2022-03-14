@@ -1,5 +1,6 @@
 import {createElement} from "../utils/component.js";
 import {FetchData} from "../components/FetchData.js";
+import {SetCookie} from "../components/CookieHandler.js";
 
 export const Login = async (target) => {
     const render = () => {
@@ -42,8 +43,7 @@ export const Login = async (target) => {
 <!--                </div>-->
                 <button id="id-btn-login-normal" class="button is-block is-info is-large is-fullwidth is-rounded-custom">로그인</button><br />
                 <p class="subtitle is-6">SNS 계정으로 로그인하기</p>
-                <button class="button login-kakao-btn is-large is-fullwidth"
-                 onclick="location.href='https://kauth.kakao.com/oauth/authorize?client_id=8861433d60e2a2021bb2d209868e868c&redirect_uri=http://localhost:8080/nidoknaedok/members/oauth/kakao&response_type=code'">
+                <button id="id-kakao-btn" class="button login-kakao-btn is-large is-fullwidth">
                     <img src="${contextPath}/images/service/kakaotalk_svg.svg" srcset="${contextPath}/images/service/kakaotalk_svg.svg" alt="kimg">&nbsp;
                     카카오 로그인
                 </button><br>
@@ -99,6 +99,12 @@ export const Login = async (target) => {
             var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"), results = regex.exec(location.search);
             return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
         }
+
+        document.getElementById("id-kakao-btn")
+            .addEventListener('click', () => {
+                SetCookie("req", getParameterByName("req").substr(1), 5);
+                location.href = 'https://kauth.kakao.com/oauth/authorize?client_id=8861433d60e2a2021bb2d209868e868c&redirect_uri=http://localhost:8080/nidoknaedok/members/oauth/kakao&response_type=code';
+            });
     }
     render();
 }

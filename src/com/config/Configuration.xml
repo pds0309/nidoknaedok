@@ -11,6 +11,7 @@
         <typeAlias type="com.dto.member.MemberDTO" alias="MemberDTO"/>
         <typeAlias type="com.dto.bookshop.BookShopDTO" alias="BookShopDTO"/>
         <typeAlias type="com.dto.book.BookDTO" alias="BookDTO"/>
+        <typeAlias type="com.dto.bookshop.BookShopHistoryDTO" alias="BookShopHistoryDTO"/>
         <typeAlias type="com.config.mybatis.SocialTypeEnumHandler" alias="SocialTypeEnumHandler"/>
         <typeAlias type="com.config.mybatis.BookShopStatusEnumHandler" alias="BookShopStatusEnumHandler"/>
         <typeAlias type="com.config.mybatis.CategoryEnumHandler" alias="CategoryEnumHandler"/>
@@ -41,5 +42,6 @@
         <mapper resource="com/config/MemberMapper.xml"/>
         <mapper resource="com/config/BookMapper.xml"/>
         <mapper resource="com/config/BookShopMapper.xml"/>
+        <mapper resource="com/config/BookShopHistoryMapper.xml"/>
     </mappers>
 </configuration>
