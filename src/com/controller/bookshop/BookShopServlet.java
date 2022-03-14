@@ -1,13 +1,12 @@
 package com.controller.bookshop;
 
-
 import com.controller.common.JSONResponse;
 import com.dto.book.BookApiDTO;
 import com.dto.book.BookDTO;
 import com.dto.bookshop.BookShopDTO;
 import com.dto.bookshop.BookShopVO;
+import com.dto.common.PageDTO;
 import com.dto.member.MemberDTO;
-import com.errors.exception.InvalidValueException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.service.book.BookService;
 import com.service.book.BookServiceImpl;
@@ -69,11 +68,25 @@ public class BookShopServlet extends HttpServlet {
         if (validParam(bookshopId)) {
             BookShopVO.Member bookShop = bookShopService.findByBookshopId(Long.parseLong(bookshopId));
             setItIsMe(request, bookShop, bookShop.getMember().getId());
-
             JSONResponse.send(response, bookShop, response.getStatus());
             return;
         }
-        throw new InvalidValueException("거래 조회를 위한 인자가 부적절함");
+
+        MemberDTO.Info memberInfo =
+                SessionHandler.verify(request.getSession(), Constants.CURRENT_MEMBER_SESSION_NAME);
+        Map<String, Long> paramMap = new HashMap<>();
+        paramMap.put("sellerId", memberInfo.getId());
+
+        int currentPage = (request.getParameter("page") == null) ? 1 : Integer.parseInt(request.getParameter("page"));
+        PageDTO<BookShopVO.Book> bookShopPageDTO = bookShopService.findAllByMemberId(paramMap, 5, currentPage);
+        int totalPageNum = (int) Math.ceil(Double.parseDouble(request.getParameter("total")) / bookShopPageDTO.getPerPage());
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("bookshops", bookShopPageDTO.gettList());
+        map.put("prev", currentPage != 1);
+        map.put("next", currentPage != totalPageNum);
+        map.put("page",currentPage);
+        JSONResponse.send(response, map, response.getStatus());
     }
 
     private void setItIsMe(HttpServletRequest request, BookShopVO.Member bookShop, long id) {
