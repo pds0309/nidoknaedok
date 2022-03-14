@@ -49,4 +49,8 @@ public class BookShopDAO {
     public Map<String, Integer> findBookShopStatsByMemberId(SqlSession session, long memberId) {
         return session.selectOne(DIR + "findBookShopStatsByMemberId", memberId);
     }
+
+    public int updateSellStatus(SqlSession session, long bookshopId) {
+        return session.update(DIR + "updateSellStatus", bookshopId);
+    }
 }
