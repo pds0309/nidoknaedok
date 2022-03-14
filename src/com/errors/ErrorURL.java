@@ -8,7 +8,8 @@ public enum ErrorURL {
     U2("/join"),
     U3("/kakaojoin"),
     U4("/kakaointeg"),
-    U5("/mypage");
+    U5("/mypage"),
+    U6("/dashboard");
 
     private final String url;
 
