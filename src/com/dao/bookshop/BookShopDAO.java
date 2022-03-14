@@ -40,4 +40,13 @@ public class BookShopDAO {
     public int updateBookShopInfo(SqlSession session, BookShopDTO bookShopDTO) {
         return session.update(DIR + "updateBookShopInfo", bookShopDTO);
     }
+
+    public PageDTO<BookShopVO.Book> findAllByMemberId(SqlSession session, Map<String, Long> paramMap, int currentPage, int perPage) {
+        return new PageDTO<>(currentPage, perPage, 0,
+                session.selectList(DIR + "findAllByMemberId", paramMap, new RowBounds((currentPage - 1) * perPage, perPage)));
+    }
+
+    public Map<String, Integer> findBookShopStatsByMemberId(SqlSession session, long memberId) {
+        return session.selectOne(DIR + "findBookShopStatsByMemberId", memberId);
+    }
 }
