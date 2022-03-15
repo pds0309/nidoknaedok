@@ -8,14 +8,14 @@ const Navigation = async () => {
         `<a class="navbar-item" href="${contextPath}/join">회원가입</a>`;
     const logOutContent =
         `<a class="navbar-item" href="${contextPath}/members/logout">로그아웃</a>`;
-    
+
     let content = `${loginContent}${signInContent}`;
     if (currentUserName) {
         content = `
                         <div class="navbar-item has-dropdown is-hoverable">
                     <a class="navbar-link" href="${contextPath}/">
                     <figure class="image is-32x32" style="margin-right: 0.5em">
-                        <img class="is-rounded mt-1" src="https://avatars1.githubusercontent.com/u/7221389?v=4&amp;s=32">
+                        <img class="is-rounded mt-1" src="${currentUserProfile === '' ? contextPath + '/images/service/kakaounknown.png' : currentUserProfile}">
                     </figure>${currentUserName}
                     </a>
                     <div class="navbar-dropdown is-right">

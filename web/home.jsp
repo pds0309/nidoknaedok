@@ -18,6 +18,7 @@
 <script>
     const contextPath = '${contextpath}';
     const currentUserName = '${meminfo.getName()}';
+    const currentUserProfile = '${meminfo.getProfileImage()}'
 </script>
 <c:if test="${not empty kakaoinfo}">
     <c:set var="info" value="${kakaoinfo}"/>
