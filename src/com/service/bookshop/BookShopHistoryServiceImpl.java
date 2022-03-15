@@ -6,7 +6,6 @@ import com.dao.bookshop.BookShopHistoryDAO;
 import com.dto.bookshop.BookShopHistoryDTO;
 import com.errors.exception.InvalidValueException;
 import com.errors.exception.NotAcceptableValueException;
-import com.errors.exception.UserNotFoundException;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.Map;
@@ -42,7 +41,7 @@ public class BookShopHistoryServiceImpl implements BookShopHistoryService {
         SqlSession session = MySqlSessionFactory.getSession();
         try {
             return historyDAO.findOneByBookshopIdId(session, paramMap)
-                    .orElseThrow(() -> new UserNotFoundException("요청 데이터를 찾을 수 없음"));
+                    .orElse(null);
         } finally {
             session.close();
         }

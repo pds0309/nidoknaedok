@@ -35,7 +35,8 @@ public class BookShopHistoryServlet extends HttpServlet {
         paramMap.put("memberId", memberId);
         paramMap.put("bookshopId", bookshopId);
 
-        JSONResponse.send(response, historyService.findOneByBookshopIdId(paramMap), response.getStatus());
+        BookShopHistoryDTO historyDTO = historyService.findOneByBookshopIdId(paramMap);
+        JSONResponse.send(response, historyDTO, historyDTO == null ? 204 : 200);
     }
 
     @Override
