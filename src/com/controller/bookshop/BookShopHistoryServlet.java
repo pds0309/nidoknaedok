@@ -26,6 +26,19 @@ public class BookShopHistoryServlet extends HttpServlet {
     private static final BookShopHistoryService historyService = new BookShopHistoryServiceImpl();
 
     @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        long memberId = ((MemberDTO.Info) SessionHandler.verify(request.getSession(),
+                Constants.CURRENT_MEMBER_SESSION_NAME)).getId();
+        long bookshopId = Long.parseLong(request.getParameter("bookshopid"));
+
+        Map<String, Long> paramMap = new HashMap<>();
+        paramMap.put("memberId", memberId);
+        paramMap.put("bookshopId", bookshopId);
+
+        JSONResponse.send(response, historyService.findOneByBookshopIdId(paramMap), response.getStatus());
+    }
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         long memberId = ((MemberDTO.Info) SessionHandler.verify(request.getSession(),
                 Constants.CURRENT_MEMBER_SESSION_NAME)).getId();
@@ -42,12 +55,35 @@ public class BookShopHistoryServlet extends HttpServlet {
                     .memo(resultObject.getString("memo"));
         } catch (Exception e) {
             e.printStackTrace();
-            throw new InvalidValueException("입력 정보가 올바르지 않습니다");
+            throw new InvalidValueException("요청 정보가 올바르지 않습니다");
         }
 
         int status = historyService.submit(historyDTO.build());
         Map<String, Object> map = new HashMap<>();
         map.put("result", status);
+        JSONResponse.send(response, map, 201);
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        BufferedReader bufferedReader = request.getReader();
+        String read = bufferedReader.readLine();
+        bufferedReader.close();
+        JSONObject resultObject = new JSONObject(read);
+
+        Map<String, Long> paramMap = new HashMap<>();
+        try {
+            paramMap.put("memberId", resultObject.getLong("member_id"));
+            paramMap.put("bookshopId", resultObject.getLong("bookshop_id"));
+        } catch (Exception e) {
+            throw new InvalidValueException("요청 정보가 올바르지 않습니다");
+        }
+        if (!SessionHandler.isItMe(request.getSession(), paramMap.get("memberId"))) {
+            throw new UserAccessDeniedException("잘못된 접근입니다");
+        }
+        historyService.deleteByBookshopIdId(paramMap);
+
+        Map<String, Object> map = new HashMap<>();
         JSONResponse.send(response, map, 201);
     }
 }
