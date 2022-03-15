@@ -13,7 +13,11 @@ public class BookShopHistoryDAO {
         return session.insert(DIR + "submit", bookShopHistoryDTO);
     }
 
-    public Optional<BookShopHistoryDTO> findOneByBookshopIdId(SqlSession session, Map<String,Long> paramMap){
+    public Optional<BookShopHistoryDTO> findOneByBookshopIdId(SqlSession session, Map<String, Long> paramMap) {
         return Optional.ofNullable(session.selectOne(DIR + "findOneByBookshopIdId", paramMap));
+    }
+
+    public int deleteByBookshopIdId(SqlSession session, Map<String, Long> paramMap) {
+        return session.delete(DIR + "deleteByBookshopIdId", paramMap);
     }
 }

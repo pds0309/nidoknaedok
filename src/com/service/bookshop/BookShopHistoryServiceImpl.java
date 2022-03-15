@@ -4,6 +4,7 @@ import com.config.MySqlSessionFactory;
 import com.dao.bookshop.BookShopDAO;
 import com.dao.bookshop.BookShopHistoryDAO;
 import com.dto.bookshop.BookShopHistoryDTO;
+import com.errors.exception.InvalidValueException;
 import com.errors.exception.NotAcceptableValueException;
 import com.errors.exception.UserNotFoundException;
 import org.apache.ibatis.session.SqlSession;
@@ -22,8 +23,7 @@ public class BookShopHistoryServiceImpl implements BookShopHistoryService {
             if (bookShopDAO.updateSellStatus(session, bookShopHistoryDTO.getBookshopId()) == 1) {
                 try {
                     status = historyDAO.submit(session, bookShopHistoryDTO);
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     throw new NotAcceptableValueException("이미 신청하셨습니다");
                 }
@@ -46,5 +46,21 @@ public class BookShopHistoryServiceImpl implements BookShopHistoryService {
         } finally {
             session.close();
         }
+    }
+
+    @Override
+    public int deleteByBookshopIdId(Map<String, Long> paramMap) {
+        SqlSession session = MySqlSessionFactory.getSession();
+        int status = 0;
+        try {
+            status = historyDAO.deleteByBookshopIdId(session, paramMap);
+            if (status == 0) {
+                throw new InvalidValueException("거래 취소에 실패했습니다");
+            }
+            session.commit();
+        } finally {
+            session.close();
+        }
+        return status;
     }
 }

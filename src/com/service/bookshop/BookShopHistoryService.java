@@ -8,4 +8,6 @@ public interface BookShopHistoryService {
     int submit(BookShopHistoryDTO bookShopHistoryDTO);
 
     BookShopHistoryDTO findOneByBookshopIdId(Map<String, Long> paramMap);
+
+    int deleteByBookshopIdId(Map<String, Long> paramMap);
 }
