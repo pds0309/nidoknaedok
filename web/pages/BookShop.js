@@ -23,7 +23,6 @@ export const BookShop = (target) => {
                     <div id="id-modal-submit"></div>
                     <div class="column is-8 is-offset-2 is-full">
                         <h1 class="title is-spaced">${book.bookTitle}</h1>
-                        <h1 class="is-hidden subtitle is-spaced has-text-danger">거래신청하셨습니다.</h1><br>
                         <div class="columns">
                             <p class="tag is-rounded is-medium is-danger">${bookshop.sell_status_id.bookStatusDetail}</p>&nbsp;
                             <p class="tag is-rounded is-medium is-info">${bookshop.selltype_id.selltypeDetail}</p>&nbsp;
@@ -100,40 +99,7 @@ export const BookShop = (target) => {
                             </div><br>
                         </div>
                     </div>
-                    <div class="column is-8 is-offset-2 is-full">
-                        <details>
-                            <summary class="subtitle is-spaced">${member.name}&nbsp;<small>님 상세보기</small></summary>
-                            <div class="column is-8 is-offset-2 is-full">
-                                <h1 class="subtitle is-spaced">가입일자</h1>
-                                    <p class="has-text-grey">${member.createdAt.substr(0, 10)}</p>
-                            </div>
-                            <div class="column is-8 is-offset-2 is-full">
-                                <h1 class="subtitle is-spaced">주소</h1>
-                                    <p class="has-text-grey">${member.address}</p>
-                            </div>
-                            <br>
-                            <div class="is-mobile tile is-ancestor has-text-centered columns">
-                                <div class="tile is-parent is-4-desktop is-4-tablet is-3-mobile column">
-                                    <article class="tile is-child box p-3">
-                                        <p class="is-4-mobile is-1-desktop has-text-danger">0<span class="is-6 has-text-grey">회</span></p>
-                                        <p class="is-6-mobile is-4-desktop">대여/판매등록</p>
-                                    </article>
-                                </div>
-                                <div class="tile is-parent is-4-desktop is-4-tablet is-3-mobile column">
-                                    <article class="tile is-child box p-3">
-                                        <p class="is-4-mobile is-1-desktop has-text-danger">14<span class="is-6 has-text-grey">회</span></p>
-                                        <p class="is-6-mobile is-4-desktop">대여/판매성공</p>
-                                    </article>
-                                </div>
-                                <div class="tile is-parent is-4-desktop is-4-tablet is-3-mobile column">
-                                    <article class="tile is-child box p-3">
-                                        <p class="is-4-mobile is-1-desktop has-text-danger">14<span class="is-6 has-text-grey">회</span></p>
-                                        <p class="is-6-mobile is-4-desktop">대출/구매성공</p>
-                                    </article>
-                                </div>
-                            </div>
-                        </details>
-                        <hr>
+                    <div id="id-seller-detail" class="column is-8 is-offset-2 is-full">
                     </div>
                     <div class="column is-8 is-offset-2 is-full">
                         <h1 class="subtitle is-spaced">게시 내용</h1>
@@ -189,6 +155,8 @@ export const BookShop = (target) => {
                         </div>                                           
                         <hr><br>
                     </div>
+                    <div id="id-i-will-buy" class="column is-8 is-offset-2 is-full box">                        
+                    </div>
                     <div class="column is-8 is-offset-2 is-full i-am-trader" style="display: none">
                         <h1 class="subtitle is-spaced">거래신청한 회원들이예요!</h1>
                         <small class="has-text-danger">&nbsp;※ 잠깐! 충분한 대화는 나누셨나요??</small><br>
@@ -229,7 +197,45 @@ export const BookShop = (target) => {
         QuillEditor("#editor");
         EditorIconEvent('.class-update-icon');
         document.querySelector('#editor .ql-editor').innerHTML = bookshop.seller_comment + "";
-
+        if(member.authority === 'RESIGN') {
+            document.getElementById("id-seller-detail")
+                .innerHTML = `<p class="subtitle has-text-danger">탈퇴한 회원입니다</p>`;
+        }else {
+            document.getElementById("id-seller-detail")
+                .innerHTML = `<details>
+                            <summary class="subtitle is-spaced">${member.name}&nbsp;<small>님 상세보기</small></summary>
+                            <div class="column is-8 is-offset-2 is-full">
+                                <h1 class="subtitle is-spaced">가입일자</h1>
+                                    <p class="has-text-grey">${member.createdAt.substr(0, 10)}</p>
+                            </div>
+                            <div class="column is-8 is-offset-2 is-full">
+                                <h1 class="subtitle is-spaced">주소</h1>
+                                    <p class="has-text-grey">${member.address}</p>
+                            </div>
+                            <br>
+                            <div class="is-mobile tile is-ancestor has-text-centered columns">
+                                <div class="tile is-parent is-4-desktop is-4-tablet is-3-mobile column">
+                                    <article class="tile is-child box p-3">
+                                        <p class="is-4-mobile is-1-desktop has-text-danger">0<span class="is-6 has-text-grey">회</span></p>
+                                        <p class="is-6-mobile is-4-desktop">대여/판매등록</p>
+                                    </article>
+                                </div>
+                                <div class="tile is-parent is-4-desktop is-4-tablet is-3-mobile column">
+                                    <article class="tile is-child box p-3">
+                                        <p class="is-4-mobile is-1-desktop has-text-danger">14<span class="is-6 has-text-grey">회</span></p>
+                                        <p class="is-6-mobile is-4-desktop">대여/판매성공</p>
+                                    </article>
+                                </div>
+                                <div class="tile is-parent is-4-desktop is-4-tablet is-3-mobile column">
+                                    <article class="tile is-child box p-3">
+                                        <p class="is-4-mobile is-1-desktop has-text-danger">14<span class="is-6 has-text-grey">회</span></p>
+                                        <p class="is-6-mobile is-4-desktop">대출/구매성공</p>
+                                    </article>
+                                </div>
+                            </div>
+                        </details>
+                        <hr>`;
+        }
         if (bookshopBookMemberVO.itIsMe) {
             document.querySelectorAll('.i-am-trader')
                 .forEach(value => value.style.display = "");
@@ -245,7 +251,7 @@ export const BookShop = (target) => {
                 contents.push(`<input type="hidden" name="authority" value=${member.authority}>`);
                 SubmitModal(document.getElementById('id-modal-submit'),
                     'modal-bookshop-offer', contents, "구매/대출 신청", "신청하기",
-                    contextPath + "/bookshops/history", 'POST');
+                    contextPath + "/bookshops/history", 'POST', findSessionUserHistory);
             } else {
                 document.querySelectorAll('.i-am-client')
                     .forEach(value => value.style.display = "none");
@@ -293,6 +299,52 @@ export const BookShop = (target) => {
                     alert(result.error.message);
                 })();
             });
+        findSessionUserHistory();
+
+        function findSessionUserHistory() {
+            if (currentUserName === '') {
+                return;
+            }
+            const result = JSON.parse(OpenDataSyncGET(contextPath + "/bookshops/history?bookshopid=" + bookshop.bookshop_id));
+            if (result.status === 200) {
+                const history = result.data;
+                const inner = `<div id="i-will-buy" class="columns is-mobile box">
+            <div class="column is-9">
+                <br>
+                <p class="subtitle">거래 신청하셨습니다</p>
+                <p><span>[일시]&nbsp;</span><span class="has-text-grey">${history.createdAt.substr(0, 16)}</span></p>
+                <p><span>[메모]&nbsp;</span><span class="has-text-grey">${history.memo}</span></p>
+            </div>
+            <div class="column has-text-centered">
+                <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
+                <button id="id-btn-cancel-history" class="button is-danger is-rounded-custom mr-1">취소</button>
+            </div>
+        </div>`;
+                document.getElementById("id-i-will-buy")
+                    .innerHTML = inner;
+                document.getElementById("id-btn-cancel-history")
+                    .addEventListener("click", () => {
+                        const request = {
+                            member_id: history.memberId,
+                            bookshop_id: history.bookshopId,
+                        };
+                        if (confirm("정말 취소하시겠어요?") === true) {
+                            (async () => {
+                                const result = await FetchData(contextPath + "/bookshops/history", 'DELETE', 'application/json', JSON.stringify(request));
+                                console.log(result);
+                                if (result.status === 201) {
+                                    alert("삭제 완료");
+                                    location.reload();
+                                    return;
+                                }
+                                alert(result.error.detail);
+                            })();
+                        } else {
+                            return false;
+                        }
+                    });
+            }
+        }
     }
     render();
 };

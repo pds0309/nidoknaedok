@@ -1,7 +1,7 @@
 import {createElement} from "../utils/component.js";
 import {FetchData} from "./FetchData.js";
 
-export function SubmitModal(target, id, [...content], title, btnTitle, url, type) {
+export function SubmitModal(target, id, [...content], title, btnTitle, url, type, endEvSuccessFunc) {
     let contents = ''
     content.forEach(v => contents += v);
     const render = () => {
@@ -79,15 +79,13 @@ export function SubmitModal(target, id, [...content], title, btnTitle, url, type
                     .then(function (response) {
                         if (response.status === 201) {
                             alert("등록 완료!");
+                            endEvSuccessFunc();
                         }
                         else if (response.error.status === 403) {
                             alert("로그인 후 가능합니다");
                         }
-                        else if(response.error.status < 500){
-                            alert(response.error.message);
-                        }
                         else{
-                            alert("이미 요청하셨습니다");
+                            alert(response.error.detail);
                         }
                         SubmitModal(target, id, [...content], title, btnTitle, url, type)
                     });

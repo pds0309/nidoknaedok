@@ -33,7 +33,7 @@ export const Dashboard = async (target) => {
                                             <div class="has-text-centered">
                                                 <figure class="image is-128x128 is-inline-block">
                                                     <img class="is-rounded"
-                                                        src="http://k.kakaocdn.net/dn/FM6nY/btqzsQQNn9s/HVVpBoqYKNxKAYD5jUGJk0/img_110x110.jpg"
+                                                        src="${member.profileImage === null ? contextPath + '/images/service/kakaounknown.png' : member.profileImage}"
                                                         alt="" style="height: inherit">
                                                 </figure>
                                                 <br><br>
