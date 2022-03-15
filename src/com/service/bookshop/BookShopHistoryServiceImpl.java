@@ -4,10 +4,12 @@ import com.config.MySqlSessionFactory;
 import com.dao.bookshop.BookShopDAO;
 import com.dao.bookshop.BookShopHistoryDAO;
 import com.dto.bookshop.BookShopHistoryDTO;
+import com.dto.bookshop.BookShopHistoryVO;
 import com.errors.exception.InvalidValueException;
 import com.errors.exception.NotAcceptableValueException;
 import org.apache.ibatis.session.SqlSession;
 
+import java.util.List;
 import java.util.Map;
 
 public class BookShopHistoryServiceImpl implements BookShopHistoryService {
@@ -61,5 +63,15 @@ public class BookShopHistoryServiceImpl implements BookShopHistoryService {
             session.close();
         }
         return status;
+    }
+
+    @Override
+    public List<BookShopHistoryVO.Member> findByBookshopId(long bookshopId) {
+        SqlSession session = MySqlSessionFactory.getSession();
+        try {
+            return historyDAO.findByBookshopId(session, bookshopId);
+        } finally {
+            session.close();
+        }
     }
 }
