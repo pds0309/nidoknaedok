@@ -4,6 +4,7 @@ import com.controller.common.JSONResponse;
 import com.dto.bookshop.BookShopHistoryDTO;
 import com.dto.member.MemberDTO;
 import com.errors.exception.InvalidValueException;
+import com.errors.exception.UserAccessDeniedException;
 import com.service.bookshop.BookShopHistoryService;
 import com.service.bookshop.BookShopHistoryServiceImpl;
 import com.utils.Constants;
@@ -54,12 +55,35 @@ public class BookShopHistoryServlet extends HttpServlet {
                     .memo(resultObject.getString("memo"));
         } catch (Exception e) {
             e.printStackTrace();
-            throw new InvalidValueException("입력 정보가 올바르지 않습니다");
+            throw new InvalidValueException("요청 정보가 올바르지 않습니다");
         }
 
         int status = historyService.submit(historyDTO.build());
         Map<String, Object> map = new HashMap<>();
         map.put("result", status);
+        JSONResponse.send(response, map, 201);
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        BufferedReader bufferedReader = request.getReader();
+        String read = bufferedReader.readLine();
+        bufferedReader.close();
+        JSONObject resultObject = new JSONObject(read);
+
+        Map<String, Long> paramMap = new HashMap<>();
+        try {
+            paramMap.put("memberId", resultObject.getLong("member_id"));
+            paramMap.put("bookshopId", resultObject.getLong("bookshop_id"));
+        } catch (Exception e) {
+            throw new InvalidValueException("요청 정보가 올바르지 않습니다");
+        }
+        if (!SessionHandler.isItMe(request.getSession(), paramMap.get("memberId"))) {
+            throw new UserAccessDeniedException("잘못된 접근입니다");
+        }
+        historyService.deleteByBookshopIdId(paramMap);
+
+        Map<String, Object> map = new HashMap<>();
         JSONResponse.send(response, map, 201);
     }
 }
