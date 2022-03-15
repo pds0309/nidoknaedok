@@ -4,7 +4,6 @@ import com.controller.common.JSONResponse;
 import com.dto.bookshop.BookShopHistoryDTO;
 import com.dto.member.MemberDTO;
 import com.errors.exception.InvalidValueException;
-import com.errors.exception.UserAccessDeniedException;
 import com.service.bookshop.BookShopHistoryService;
 import com.service.bookshop.BookShopHistoryServiceImpl;
 import com.utils.Constants;
@@ -24,6 +23,19 @@ import java.util.Map;
 @WebServlet("/bookshops/history")
 public class BookShopHistoryServlet extends HttpServlet {
     private static final BookShopHistoryService historyService = new BookShopHistoryServiceImpl();
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        long memberId = ((MemberDTO.Info) SessionHandler.verify(request.getSession(),
+                Constants.CURRENT_MEMBER_SESSION_NAME)).getId();
+        long bookshopId = Long.parseLong(request.getParameter("bookshopid"));
+
+        Map<String, Long> paramMap = new HashMap<>();
+        paramMap.put("memberId", memberId);
+        paramMap.put("bookshopId", bookshopId);
+
+        JSONResponse.send(response, historyService.findOneByBookshopIdId(paramMap), response.getStatus());
+    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
