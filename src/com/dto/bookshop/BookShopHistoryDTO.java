@@ -1,7 +1,6 @@
 package com.dto.bookshop;
 
 public class BookShopHistoryDTO {
-    private long historyId;
     private long bookshopId;
     private long memberId;
     private String memo;
@@ -46,10 +45,6 @@ public class BookShopHistoryDTO {
         }
     }
 
-    public long getHistoryId() {
-        return historyId;
-    }
-
     public long getBookshopId() {
         return bookshopId;
     }
@@ -59,7 +54,7 @@ public class BookShopHistoryDTO {
     }
 
     public String getMemo() {
-        return memo;
+        return memo.length() > 100 ? memo.substring(0, 100) : memo;
     }
 
     public String getCreatedAt() {
