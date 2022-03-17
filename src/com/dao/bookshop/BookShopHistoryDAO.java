@@ -26,4 +26,8 @@ public class BookShopHistoryDAO {
     public List<BookShopHistoryVO.Member> findByBookshopId(SqlSession session, long bookshopId) {
         return session.selectList(DIR + "findByBookshopId", bookshopId);
     }
+
+    public int updateHistoryById(SqlSession session, BookShopHistoryDTO historyDTO) {
+        return session.update(DIR + "updateHistoryById", historyDTO);
+    }
 }

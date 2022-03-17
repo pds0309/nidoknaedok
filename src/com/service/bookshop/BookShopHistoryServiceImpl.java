@@ -74,4 +74,20 @@ public class BookShopHistoryServiceImpl implements BookShopHistoryService {
             session.close();
         }
     }
+
+    @Override
+    public int updateHistoryById(BookShopHistoryDTO historyDTO) {
+        SqlSession session = MySqlSessionFactory.getSession();
+        int status = 0;
+        try {
+            status = historyDAO.updateHistoryById(session, historyDTO);
+            if (status == 0) {
+                throw new NotAcceptableValueException("이미 다른분과 약속하지 않으셨나요?");
+            }
+            session.commit();
+        } finally {
+            session.close();
+        }
+        return status;
+    }
 }
