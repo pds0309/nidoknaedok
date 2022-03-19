@@ -3,6 +3,8 @@ import {OpenDataSyncGET, FetchData} from "../components/FetchData.js";
 import {QuillEditor} from "../components/QuillEditor.js";
 import {EditorIconEvent} from "../components/EditorIconEvent.js";
 import {SubmitModal} from "../components/Modals.js";
+import {SellerConfirm} from "./shop/SellerConfirm.js";
+import {BuyerConfirm} from "./shop/BuyerConfirm.js";
 
 export const BookShop = (target) => {
     const currentURL = new URL(window.location);
@@ -155,37 +157,11 @@ export const BookShop = (target) => {
                         </div>                                           
                         <hr><br>
                     </div>
-                    <div id="id-i-will-buy" class="column is-8 is-offset-2 is-full box">                        
-                    </div>
+                    <div id="id-i-will-buy" class="column is-8 is-offset-2 is-full box i-am-client"></div>                        
                     <div class="column is-8 is-offset-2 is-full i-am-trader" style="display: none">
                         <h1 class="subtitle is-spaced">거래신청한 회원들이예요!</h1>
                         <small class="has-text-danger">&nbsp;※ 잠깐! 충분한 대화는 나누셨나요??</small><br>
-                        <div class="columns is-mobile box">
-                            <div class="column is-9">
-                                    <p class="subtitle">이름이름이름이름이름이름</p>
-                                    <p><span>[주소]&nbsp;</span><span class="has-text-grey">경기도 광명시 하안 1동</span></p>
-                                    <p><span>[일시]&nbsp;</span><span class="has-text-grey">2022/04/06 16:57</span></p>
-                                    <p><span>[메모]&nbsp;</span><span class="has-text-grey">치킨무는 뺴주시고 단무지 많이 주세요</span></p>
-                            </div>
-                            <div class="column has-text-centered">
-                                <p>&nbsp;</p><p>&nbsp;</p>    
-                                <button class="button is-info is-rounded-custom mb-1 mr-1">수락</button>
-                                <button class="button is-danger is-rounded-custom mr-1">거절</button>
-                            </div>
-                        </div><br><br>
-                        <div class="columns is-mobile box">
-                            <div class="column is-9">
-                                    <p class="subtitle">이름이름이름이름이름이름</p>
-                                    <p><span>[주소]&nbsp;</span><span class="has-text-grey">경기도 광명시 하안 1동</span></p>
-                                    <p><span>[일시]&nbsp;</span><span class="has-text-grey">2022/04/06 16:57</span></p>
-                                    <p><span>[메모]&nbsp;</span><span class="has-text-grey">치킨무는 뺴주시고 단무지 많이 주세요</span></p>
-                            </div>
-                            <div class="column has-text-centered">
-                                <p>&nbsp;</p><p>&nbsp;</p>    
-                                <button class="button is-info is-rounded-custom mb-1 mr-1">수락</button>
-                                <button class="button is-danger is-rounded-custom mr-1">쪽지</button>
-                            </div>
-                        </div>
+                        <div id="id-i-will-sell"></div>
                     </div>
                 </div>
             </div>`
@@ -197,10 +173,10 @@ export const BookShop = (target) => {
         QuillEditor("#editor");
         EditorIconEvent('.class-update-icon');
         document.querySelector('#editor .ql-editor').innerHTML = bookshop.seller_comment + "";
-        if(member.authority === 'RESIGN') {
+        if (member.authority === 'RESIGN') {
             document.getElementById("id-seller-detail")
                 .innerHTML = `<p class="subtitle has-text-danger">탈퇴한 회원입니다</p>`;
-        }else {
+        } else {
             document.getElementById("id-seller-detail")
                 .innerHTML = `<details>
                             <summary class="subtitle is-spaced">${member.name}&nbsp;<small>님 상세보기</small></summary>
@@ -240,7 +216,12 @@ export const BookShop = (target) => {
             document.querySelectorAll('.i-am-trader')
                 .forEach(value => value.style.display = "");
             document.querySelectorAll('.i-am-client')
-                .forEach(value => value.style.display = "none");
+                .forEach((value) => value.style.display = "none");
+            (async () => {
+                const result = await FetchData(contextPath + "/bookshops/historylist?memberid=" + member.id + "&bookshopid=" + bookshop.bookshop_id, 'GET');
+                const hasConfirmed = result.data[0].history.status_id.bookStatusId === 2500;
+                SellerConfirm(document.getElementById("id-i-will-sell"), result.data, hasConfirmed, member.id);
+            })();
         } else {
             if (member.authority !== 'RESIGN') {
                 const contents = [];
@@ -257,7 +238,6 @@ export const BookShop = (target) => {
                     .forEach(value => value.style.display = "none");
             }
         }
-
         document.getElementById("id-btn-update")
             .addEventListener("click", () => {
                 const updateElement = document.getElementById("id-div-update");
@@ -305,45 +285,12 @@ export const BookShop = (target) => {
             if (currentUserName === '') {
                 return;
             }
-            const result = JSON.parse(OpenDataSyncGET(contextPath + "/bookshops/history?bookshopid=" + bookshop.bookshop_id));
-            if (result.status === 200) {
-                const history = result.data;
-                const inner = `<div id="i-will-buy" class="columns is-mobile box">
-            <div class="column is-9">
-                <br>
-                <p class="subtitle">거래 신청하셨습니다</p>
-                <p><span>[일시]&nbsp;</span><span class="has-text-grey">${history.createdAt.substr(0, 16)}</span></p>
-                <p><span>[메모]&nbsp;</span><span class="has-text-grey">${history.memo}</span></p>
-            </div>
-            <div class="column has-text-centered">
-                <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
-                <button id="id-btn-cancel-history" class="button is-danger is-rounded-custom mr-1">취소</button>
-            </div>
-        </div>`;
-                document.getElementById("id-i-will-buy")
-                    .innerHTML = inner;
-                document.getElementById("id-btn-cancel-history")
-                    .addEventListener("click", () => {
-                        const request = {
-                            member_id: history.memberId,
-                            bookshop_id: history.bookshopId,
-                        };
-                        if (confirm("정말 취소하시겠어요?") === true) {
-                            (async () => {
-                                const result = await FetchData(contextPath + "/bookshops/history", 'DELETE', 'application/json', JSON.stringify(request));
-                                console.log(result);
-                                if (result.status === 201) {
-                                    alert("삭제 완료");
-                                    location.reload();
-                                    return;
-                                }
-                                alert(result.error.detail);
-                            })();
-                        } else {
-                            return false;
-                        }
-                    });
+            const response = OpenDataSyncGET(contextPath + "/bookshops/history?bookshopid=" + bookshop.bookshop_id);
+            if (response === "") {
+                return;
             }
+            const result = JSON.parse(response);
+            BuyerConfirm(document.getElementById('id-i-will-buy'), result,bookshop.selltype_id,member.id);
         }
     }
     render();
