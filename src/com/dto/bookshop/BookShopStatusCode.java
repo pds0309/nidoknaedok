@@ -6,7 +6,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public enum BookShopStatusCode {
     SUBMIT(1000, "등록됨"),
     PROCESSING(2000, "거래 진행중"),
-    COMMIT(3000, "거래 완료");
+    WAITING(2500, "완료 대기중"),
+    COMMIT(4000, "거래 완료"),
+    LOANING(3000, "대여중");
 
     private final long bookStatusId;
     private final String bookStatusDetail;

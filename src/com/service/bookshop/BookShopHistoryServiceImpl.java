@@ -4,11 +4,12 @@ import com.config.MySqlSessionFactory;
 import com.dao.bookshop.BookShopDAO;
 import com.dao.bookshop.BookShopHistoryDAO;
 import com.dto.bookshop.BookShopHistoryDTO;
+import com.dto.bookshop.BookShopHistoryVO;
 import com.errors.exception.InvalidValueException;
 import com.errors.exception.NotAcceptableValueException;
-import com.errors.exception.UserNotFoundException;
 import org.apache.ibatis.session.SqlSession;
 
+import java.util.List;
 import java.util.Map;
 
 public class BookShopHistoryServiceImpl implements BookShopHistoryService {
@@ -42,7 +43,7 @@ public class BookShopHistoryServiceImpl implements BookShopHistoryService {
         SqlSession session = MySqlSessionFactory.getSession();
         try {
             return historyDAO.findOneByBookshopIdId(session, paramMap)
-                    .orElseThrow(() -> new UserNotFoundException("요청 데이터를 찾을 수 없음"));
+                    .orElse(null);
         } finally {
             session.close();
         }
@@ -56,6 +57,32 @@ public class BookShopHistoryServiceImpl implements BookShopHistoryService {
             status = historyDAO.deleteByBookshopIdId(session, paramMap);
             if (status == 0) {
                 throw new InvalidValueException("거래 취소에 실패했습니다");
+            }
+            session.commit();
+        } finally {
+            session.close();
+        }
+        return status;
+    }
+
+    @Override
+    public List<BookShopHistoryVO.Member> findByBookshopId(long bookshopId) {
+        SqlSession session = MySqlSessionFactory.getSession();
+        try {
+            return historyDAO.findByBookshopId(session, bookshopId);
+        } finally {
+            session.close();
+        }
+    }
+
+    @Override
+    public int updateHistoryById(BookShopHistoryDTO historyDTO) {
+        SqlSession session = MySqlSessionFactory.getSession();
+        int status = 0;
+        try {
+            status = historyDAO.updateHistoryById(session, historyDTO);
+            if (status == 0) {
+                throw new NotAcceptableValueException("이미 다른분과 약속하지 않으셨나요?");
             }
             session.commit();
         } finally {

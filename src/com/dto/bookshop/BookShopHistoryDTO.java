@@ -1,10 +1,18 @@
 package com.dto.bookshop;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class BookShopHistoryDTO {
+    private long historyId;
     private long bookshopId;
     private long memberId;
     private String memo;
     private String createdAt;
+    private BookShopStatusCode statusId;
 
     public BookShopHistoryDTO() {
         //
@@ -14,12 +22,14 @@ public class BookShopHistoryDTO {
         this.bookshopId = builder.bookshopId;
         this.memberId = builder.memberId;
         this.memo = builder.memo;
+        this.statusId = builder.statusId;
     }
 
     public static class Builder {
         private long bookshopId;
         private long memberId;
         private String memo;
+        private BookShopStatusCode statusId;
 
         public Builder() {
             //
@@ -37,6 +47,11 @@ public class BookShopHistoryDTO {
 
         public Builder memo(String value) {
             memo = value;
+            return this;
+        }
+
+        public Builder statusId(BookShopStatusCode value) {
+            statusId = value;
             return this;
         }
 
@@ -59,5 +74,13 @@ public class BookShopHistoryDTO {
 
     public String getCreatedAt() {
         return createdAt;
+    }
+
+    public BookShopStatusCode getStatusId() {
+        return statusId;
+    }
+
+    public long getHistoryId() {
+        return historyId;
     }
 }

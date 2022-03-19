@@ -2,9 +2,11 @@ package com.controller.bookshop;
 
 import com.controller.common.JSONResponse;
 import com.dto.bookshop.BookShopHistoryDTO;
+import com.dto.bookshop.BookShopStatusCode;
 import com.dto.member.MemberDTO;
 import com.errors.exception.InvalidValueException;
 import com.errors.exception.UserAccessDeniedException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.service.bookshop.BookShopHistoryService;
 import com.service.bookshop.BookShopHistoryServiceImpl;
 import com.utils.Constants;
@@ -35,7 +37,8 @@ public class BookShopHistoryServlet extends HttpServlet {
         paramMap.put("memberId", memberId);
         paramMap.put("bookshopId", bookshopId);
 
-        JSONResponse.send(response, historyService.findOneByBookshopIdId(paramMap), response.getStatus());
+        BookShopHistoryDTO historyDTO = historyService.findOneByBookshopIdId(paramMap);
+        JSONResponse.send(response, historyDTO, historyDTO == null ? 204 : 200);
     }
 
     @Override
@@ -52,7 +55,8 @@ public class BookShopHistoryServlet extends HttpServlet {
         try {
             historyDTO.bookshopId(resultObject.getLong("bookshop_id"))
                     .memberId(memberId)
-                    .memo(resultObject.getString("memo"));
+                    .memo(resultObject.getString("memo"))
+                    .statusId(BookShopStatusCode.PROCESSING);
         } catch (Exception e) {
             e.printStackTrace();
             throw new InvalidValueException("요청 정보가 올바르지 않습니다");
@@ -85,5 +89,20 @@ public class BookShopHistoryServlet extends HttpServlet {
 
         Map<String, Object> map = new HashMap<>();
         JSONResponse.send(response, map, 201);
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        BufferedReader bufferedReader = request.getReader();
+        String read = bufferedReader.readLine();
+        bufferedReader.close();
+        JSONObject result = new JSONObject(read);
+
+        if (SessionHandler.isItMe(request.getSession(), result.getLong("seller_id"))) {
+            throw new UserAccessDeniedException("잘못된 접근입니다.");
+        }
+
+        historyService.updateHistoryById(new ObjectMapper().readValue(read, BookShopHistoryDTO.class));
+        JSONResponse.send(response, null, response.getStatus());
     }
 }

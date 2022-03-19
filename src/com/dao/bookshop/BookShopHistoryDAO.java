@@ -1,8 +1,10 @@
 package com.dao.bookshop;
 
 import com.dto.bookshop.BookShopHistoryDTO;
+import com.dto.bookshop.BookShopHistoryVO;
 import org.apache.ibatis.session.SqlSession;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -19,5 +21,13 @@ public class BookShopHistoryDAO {
 
     public int deleteByBookshopIdId(SqlSession session, Map<String, Long> paramMap) {
         return session.delete(DIR + "deleteByBookshopIdId", paramMap);
+    }
+
+    public List<BookShopHistoryVO.Member> findByBookshopId(SqlSession session, long bookshopId) {
+        return session.selectList(DIR + "findByBookshopId", bookshopId);
+    }
+
+    public int updateHistoryById(SqlSession session, BookShopHistoryDTO historyDTO) {
+        return session.update(DIR + "updateHistoryById", historyDTO);
     }
 }
