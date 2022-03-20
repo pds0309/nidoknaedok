@@ -1,6 +1,7 @@
 package com.dao.bookshop;
 
 import com.dto.bookshop.BookShopDTO;
+import com.dto.bookshop.BookShopHistoryDTO;
 import com.dto.bookshop.BookShopVO;
 import com.dto.bookshop.TradeCode;
 import com.dto.common.PageDTO;
@@ -50,7 +51,7 @@ public class BookShopDAO {
         return session.selectOne(DIR + "findBookShopStatsByMemberId", memberId);
     }
 
-    public int updateSellStatus(SqlSession session, long bookshopId) {
-        return session.update(DIR + "updateSellStatus", bookshopId);
+    public int updateSellStatus(SqlSession session, BookShopHistoryDTO bookShopHistoryDTO) {
+        return session.update(DIR + "updateSellStatus", bookShopHistoryDTO);
     }
 }

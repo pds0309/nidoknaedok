@@ -4,10 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum TradeCode {
-    RS(100, "판매요청"),
-    SB(200, "대여"),
-    RB(300, "대여요청"),
-    SS(400, "판매");
+    SB(200, "대여등록"),
+    RB(300, "대여요청");
 
     private final int selltypeId;
     private final String selltypeDetail;

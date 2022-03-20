@@ -16,7 +16,7 @@ public class BookShopDTO {
     private String createdAt;
     private String updatedAt;
     private String endedAt;
-    private int sellPrice;
+    private int cnt;
     private BookShopStatusCode sellStatusId;
     private TradeCode selltypeId;
     private CategoryCode category;
@@ -57,8 +57,8 @@ public class BookShopDTO {
         return endedAt;
     }
 
-    public int getSellPrice() {
-        return sellPrice;
+    public int getCnt() {
+        return cnt;
     }
 
     public BookShopStatusCode getSellStatusId() {
@@ -81,21 +81,4 @@ public class BookShopDTO {
         this.sellerId = sellerId;
     }
 
-    @Override
-    public String toString() {
-        return "BookShopDTO{" +
-                "bookshopId=" + bookshopId +
-                ", sellerId=" + sellerId +
-                ", sellerComment='" + sellerComment + '\'' +
-                ", sellerShort='" + sellerShort + '\'' +
-                ", bookId=" + bookId +
-                ", createdAt='" + createdAt + '\'' +
-                ", updatedAt='" + updatedAt + '\'' +
-                ", endedAt='" + endedAt + '\'' +
-                ", sellPrice=" + sellPrice +
-                ", sellStatusId=" + sellStatusId +
-                ", selltypeId=" + selltypeId +
-                ", category=" + category +
-                '}';
-    }
 }

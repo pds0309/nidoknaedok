@@ -21,17 +21,14 @@ public class BookShopHistoryServiceImpl implements BookShopHistoryService {
         SqlSession session = MySqlSessionFactory.getSession();
         int status = 0;
         try {
-            if (bookShopDAO.updateSellStatus(session, bookShopHistoryDTO.getBookshopId()) == 1) {
-                try {
-                    status = historyDAO.submit(session, bookShopHistoryDTO);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new NotAcceptableValueException("이미 신청하셨습니다");
-                }
-                session.commit();
-            } else {
-                throw new NotAcceptableValueException("이미 완료된 거래거나 탈퇴한 회원의 거래입니다");
+            status = historyDAO.submit(session, bookShopHistoryDTO);
+            if (bookShopDAO.updateSellStatus(session, bookShopHistoryDTO) == 0) {
+                throw new NotAcceptableValueException("탈퇴한 회원과 거래하실 수 없습니다");
             }
+            session.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new NotAcceptableValueException("이미 신청하셨거나 완료된 거래입니다");
         } finally {
             session.close();
         }
@@ -81,6 +78,7 @@ public class BookShopHistoryServiceImpl implements BookShopHistoryService {
         int status = 0;
         try {
             status = historyDAO.updateHistoryById(session, historyDTO);
+            bookShopDAO.updateSellStatus(session, historyDTO);
             if (status == 0) {
                 throw new NotAcceptableValueException("이미 다른분과 약속하지 않으셨나요?");
             }
