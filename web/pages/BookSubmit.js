@@ -19,7 +19,7 @@ export const BookSubmit = (target) => {
                             <div class="control has-text-centered">
                                 <label class="radio">
                                 <input type="radio" name="selltype_id" value="SB" checked>&nbsp;대여등록</label>&nbsp;                                                                
-                                <input type="radio" name="selltype_id" value="SS">&nbsp;판매등록</label>&nbsp;
+<!--                                <input type="radio" name="selltype_id" value="SS">&nbsp;판매등록</label>&nbsp;-->
                             </div>
                         </div><br>
                         <div class="field">
@@ -117,18 +117,7 @@ export const BookSubmit = (target) => {
                                     </select>
                                 </div>                                
                             </div>                                
-                                </div>
-                                <div class="column">
-                        <div id="id-book-desc" class="field">
-                            <label class="label">가격</label>
-                            <div class="control has-icons-left has-icons-right">
-                                <input class="input is-rounded-custom" type="number" name="sell_price" />    
-                            <span class="icon is-small is-left">
-                                <i class="fa-solid fa-martini-glass"></i>
-                            </span>
-                            </div>
-                        </div><br>                                    
-                                </div>                           
+                                </div>                          
                             </div>
                         </div><br>
                         <div class="field">
@@ -200,7 +189,6 @@ export const BookSubmit = (target) => {
                 request.seller_comment = "" + document.querySelector(".ql-editor").innerHTML + "";
                 request.category = document.querySelector('select[name="category"]').selectedOptions[0].value;
                 request.image = document.getElementById('id-book-image').src;
-                request.sell_price = document.querySelector('input[name="sell_price"]').value;
                 request.seller_short = document.querySelector('input[name="seller_short"]').value;
                 (async () => {
                     const result = await FetchData(contextPath + "/bookshops", "POST", 'application/json', JSON.stringify(request));

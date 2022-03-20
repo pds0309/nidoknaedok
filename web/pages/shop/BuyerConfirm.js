@@ -2,13 +2,12 @@ import {createElement} from "../../utils/component.js";
 import {FetchData} from "../../components/FetchData.js";
 
 export const BuyerConfirm = (target, result, selltypeId, seller_id) => {
-    console.log(selltypeId);
     if (result.status !== 200) {
         return;
     }
     let confirmation = ``;
     const history = result.data;
-    const needConfirm = history.status_id.bookStatusId >= 2500;
+    const needConfirm = history.status_id.bookStatusId >= 2000;
     if (needConfirm) {
         confirmation = `<p id="id-p-confirm-history-msg">도서를 수령하셨다면 '확정' 버튼을 클릭해주세요! </p>
                 <button id="id-btn-confirm-history" class="button is-success is-rounded-custom mr-1">확정</button>`;

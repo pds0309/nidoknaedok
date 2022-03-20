@@ -113,8 +113,6 @@ export const Mypage = async (target) => {
                     password: password.value.trim(),
                     social_id: myinfo.socialId
                 };
-                console.log(data);
-                console.log(myinfo.socialType);
                 if ((!passwordDiv.hidden && password.value !== '') || myinfo.socialType !== 'NORMAL') {
                     (async () => {
                         const result = await FetchData(contextPath + "/members", 'DELETE', 'application/json', JSON.stringify(data));

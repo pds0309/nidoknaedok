@@ -76,21 +76,21 @@ export const Dashboard = async (target) => {
                                             <article class="tile is-child box">
                                                 <p class="is-4-mobile is-1-desktop has-text-danger">${sellCount}<span
                                                         class="is-6 has-text-grey">회</span></p>
-                                                <p class="is-6-mobile is-4-desktop">대여/판매등록</p>
+                                                <p class="is-6-mobile is-4-desktop">대여등록</p>
                                             </article>
                                         </div>
                                         <div class="tile is-parent is-4-desktop is-4-tablet is-4-mobile column">
                                             <article class="tile is-child box">
                                                 <p class="is-4-mobile is-1-desktop has-text-danger">99<span
                                                         class="is-6 has-text-grey">회</span></p>
-                                                <p class="is-6-mobile is-4-desktop">대여/판매성공</p>
+                                                <p class="is-6-mobile is-4-desktop">대여성공</p>
                                             </article>
                                         </div>
                                         <div class="tile is-parent is-4-desktop is-4-tablet is-4-mobile column">
                                             <article class="tile is-child box">
                                                 <p class="is-4-mobile is-1-desktop has-text-danger">99<span
                                                         class="is-6 has-text-grey">회</span></p>
-                                                <p class="is-6-mobile is-4-desktop">대출/구매성공</p>
+                                                <p class="is-6-mobile is-4-desktop">대출성공</p>
                                             </article>
                                         </div>
                                     </div>
@@ -98,7 +98,7 @@ export const Dashboard = async (target) => {
                             </div>
                             <div class="column is-half-desktop">
                                 <div class="card is-rounded-custom"><br>
-                                    <h2 class="title is-spaced has-text-centered is-underlined">내 판매/대여</h2>
+                                    <h2 class="title is-spaced has-text-centered is-underlined">내 대여</h2>
                                     <table class="table is-bordered is-striped is-narrow is-fullwidth mt-4">
                                         <thead>
                                             <tr>
@@ -122,7 +122,7 @@ export const Dashboard = async (target) => {
                                     <br>
                                 </div><br><br>
                                 <div class="card is-rounded-custom"><br>
-                                    <h2 class="title is-spaced has-text-centered is-underlined">내 구매/대출</h2>
+                                    <h2 class="title is-spaced has-text-centered is-underlined">내 대출</h2>
                                     <table class="table is-bordered is-striped is-narrow is-fullwidth mt-4">
                                         <thead>
                                             <tr>

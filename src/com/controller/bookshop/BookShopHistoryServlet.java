@@ -56,7 +56,7 @@ public class BookShopHistoryServlet extends HttpServlet {
             historyDTO.bookshopId(resultObject.getLong("bookshop_id"))
                     .memberId(memberId)
                     .memo(resultObject.getString("memo"))
-                    .statusId(BookShopStatusCode.PROCESSING);
+                    .statusId(BookShopStatusCode.SUBMIT);
         } catch (Exception e) {
             e.printStackTrace();
             throw new InvalidValueException("요청 정보가 올바르지 않습니다");
