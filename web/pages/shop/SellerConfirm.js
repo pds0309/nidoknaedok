@@ -1,7 +1,11 @@
 import {createElement} from "../../utils/component.js";
 import {FetchData} from "../../components/FetchData.js";
 
-export const SellerConfirm = (target, list, hasConfirmed, seller_id) => {
+export const SellerConfirm = (target, list, seller_id) => {
+    if (list.length === 0) {
+        return;
+    }
+    const hasConfirmed = list[0].history.status_id.bookStatusId === 2000;
     const render = () => {
         let inner = '';
         list.forEach((data, idx) => {
@@ -68,7 +72,7 @@ export const SellerConfirm = (target, list, hasConfirmed, seller_id) => {
         function cancel(history) {
             if (confirm("정말 거래를 취소하시겠어요?") === true) {
                 (async () => {
-                    history.status_id = 'PROCESSING';
+                    history.status_id = 'SUBMIT';
                     history.seller_id = seller_id;
                     const res = await FetchData(contextPath + "/bookshops/historylist", 'PUT', "application/json", JSON.stringify(history));
                     if (res.status === 200) {
@@ -84,7 +88,7 @@ export const SellerConfirm = (target, list, hasConfirmed, seller_id) => {
         }
 
         function commit(history) {
-            history.status_id = 'WAITING';
+            history.status_id = 'PROCESSING';
             history.seller_id = seller_id;
             if (confirm("정말 이 사람과 거래하실건가요??") === true) {
                 (async () => {

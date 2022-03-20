@@ -5,7 +5,6 @@ import {Submission} from "../components/Submission.js";
 
 const bookShopList1 = OpenDataSyncGET(contextPath + "/bookshoplist");
 const bookShopList3 = OpenDataSyncGET(contextPath + "/bookshoptype?tradecode=SB");
-const bookShopList4 = OpenDataSyncGET(contextPath + "/bookshoptype?tradecode=SS");
 export const Home = async (target) => {
     const params = Submission(Home);
     const dropdown = Submission(Home);
@@ -21,13 +20,11 @@ export const Home = async (target) => {
                     <li class="is-active"><a id="tab-book-area1" class="home-tab" href="${contextPath}/">전체보기</a></li>
                     <li><a href="${contextPath}/booksubmit">등록하기</a></li>
                     <li><a id="tab-book-area3" class="home-tab" href="${contextPath}/">대여목록</a></li>
-                    <li><a id="tab-book-area4" class="home-tab" href="${contextPath}/">판매목록</a></li>
                 </ul>
             </div>        
         </div><br><br>
         <div class="home-div" id="book-area1">${bookShopList1}</div><br>
         <div class="home-div" id="book-area3" hidden>${bookShopList3}</div><br>
-        <div class="home-div" id="book-area4" hidden>${bookShopList4}</div><br>
     </div>`));
         Search(document.getElementById("search-area"));
         setEvent();
@@ -36,7 +33,7 @@ export const Home = async (target) => {
     const setEvent = () => {
         setMainPaging();
         setRender('id-200', 'book-area3', contextPath + "/bookshoptype?tradecode=SB");
-        setRender('id-400', 'book-area4', contextPath + "/bookshoptype?tradecode=SS");
+        // setRender('id-400', 'book-area4', contextPath + "/bookshoptype?tradecode=SS");
 
         function setRender(id, target, url) {
             setTypePaging(id, target, url, params.get[0]);
@@ -100,7 +97,7 @@ export const Home = async (target) => {
                 .addEventListener("submit", (ev) => {
                     const categ = document.querySelector(`#${id}-form select[name="categorycode"]`).selectedOptions[0].value;
                     const status = document.querySelector(`#${id}-form select[name="statuscode"]`).selectedOptions[0].value;
-                    const param = "&categorycode=" + categ + "&statuscode=" + status + "";
+                    const param = "=" + categ + "&statuscode=" + status + "";
                     params.set(param);
                     dropdown.set(categ);
                     document.getElementById(target).innerHTML = OpenDataSyncGET(url + param);

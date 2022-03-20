@@ -40,9 +40,9 @@
                             <div class="select">
                                 <select name="statuscode">
                                     <option class="has-text-weight-bold" value="" selected>전체 보기</option>
-                                    <option value="SUBMIT">등록중</option>
+                                    <option value="SUBMIT">등록됨</option>
                                     <option value="PROCESSING">진행중</option>
-                                    <option value="COMMIT">완료됨</option>
+                                    <option value="LOANING">대여중</option>
                                 </select>
                             </div>
                         </div>
@@ -73,7 +73,6 @@
                             <a href="${contextPath}/bookshop?bookshopid=${bookshop.getBookshopId()}" class="is-size-6-mobile is-hidden-desktop is-hidden-tablet is-link-custom">${book.getBookTitle()}</a>
                             <p class="is-size-4-desktop is-size-7-mobile mb-1">
                                 <span>[${book.getAuthor()}]&nbsp;&nbsp;</span>
-                                <span>₩<fmt:formatNumber value="${bookshop.getSellPrice()}" pattern="#,###"/>&nbsp;&nbsp;</span>
                                 <span>${bookshop.getSellStatusId().getBookStatusDetail()}&nbsp;&nbsp;</span>
                             </p>
                             <p class="is-hidden-mobile tag is-rounded is-medium is-danger">${bookshop.getSelltypeId().getSelltypeDetail()}</p>

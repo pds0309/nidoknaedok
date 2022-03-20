@@ -57,12 +57,12 @@ export const BookShop = (target) => {
                                 <div class="columns is-mobile">
                                     <div class="column is-one-quarter has-text-left ml-4" style="white-space: nowrap;">
                                         <p class="font-weight-bold subtitle">ISBN</p>
-                                        <p class="font-weight-bold subtitle">가격</p>
+                                        <p class="font-weight-bold subtitle">대여횟수</p>
                                         <p class="font-weight-bold subtitle">코멘트</p>
                                     </div>
                                     <div class="column" style="white-space: nowrap;">
                                         <p class="subtitle">${book.bookId}</p>
-                                        <p><span class="subtitle">${bookshop["sell_price"].toLocaleString('ko-KR')}</span> 원</p>
+                                        <p><span class="subtitle">${bookshop["cnt"]}</span> 회</p>
                                         <p class="mt-5">
                                             <small>${bookshop.seller_short === null ? '코멘트가 없습니다' : bookshop.seller_short}</small>
                                         </p>                                        
@@ -132,10 +132,7 @@ export const BookShop = (target) => {
                             <form>
                                 <br>
                                 <div id="id-div-update" class="field box is-hidden">
-                                    <h2 class="subtitle">가격&nbsp;<a class="class-update-icon">
-                                    <i class="fa-solid fa-pencil"></i></a></h2>
-                                    <input id="id-price" style="background-color: #efecec"
-                                        class="input is-rounded-custom" type="number" readonly="" value="" placeholder="${bookshop.sell_price}"><br><br>
+                                    <br><br>
                                     <h2 class="subtitle">코멘트&nbsp;<a class="class-update-icon"><i
                                                 class="fa-solid fa-pencil"></i></a></h2>
                                     <input id="id-short" style="background-color: #efecec"
@@ -193,19 +190,19 @@ export const BookShop = (target) => {
                                 <div class="tile is-parent is-4-desktop is-4-tablet is-3-mobile column">
                                     <article class="tile is-child box p-3">
                                         <p class="is-4-mobile is-1-desktop has-text-danger">0<span class="is-6 has-text-grey">회</span></p>
-                                        <p class="is-6-mobile is-4-desktop">대여/판매등록</p>
+                                        <p class="is-6-mobile is-4-desktop">대여등록</p>
                                     </article>
                                 </div>
                                 <div class="tile is-parent is-4-desktop is-4-tablet is-3-mobile column">
                                     <article class="tile is-child box p-3">
                                         <p class="is-4-mobile is-1-desktop has-text-danger">14<span class="is-6 has-text-grey">회</span></p>
-                                        <p class="is-6-mobile is-4-desktop">대여/판매성공</p>
+                                        <p class="is-6-mobile is-4-desktop">대여성공</p>
                                     </article>
                                 </div>
                                 <div class="tile is-parent is-4-desktop is-4-tablet is-3-mobile column">
                                     <article class="tile is-child box p-3">
                                         <p class="is-4-mobile is-1-desktop has-text-danger">14<span class="is-6 has-text-grey">회</span></p>
-                                        <p class="is-6-mobile is-4-desktop">대출/구매성공</p>
+                                        <p class="is-6-mobile is-4-desktop">대출성공</p>
                                     </article>
                                 </div>
                             </div>
@@ -219,8 +216,7 @@ export const BookShop = (target) => {
                 .forEach((value) => value.style.display = "none");
             (async () => {
                 const result = await FetchData(contextPath + "/bookshops/historylist?memberid=" + member.id + "&bookshopid=" + bookshop.bookshop_id, 'GET');
-                const hasConfirmed = result.data[0].history.status_id.bookStatusId === 2500;
-                SellerConfirm(document.getElementById("id-i-will-sell"), result.data, hasConfirmed, member.id);
+                SellerConfirm(document.getElementById("id-i-will-sell"), result.data, member.id);
             })();
         } else {
             if (member.authority !== 'RESIGN') {
@@ -231,7 +227,7 @@ export const BookShop = (target) => {
                 contents.push(`<input type="hidden" name="bookshop_id" value=${bookshop.bookshop_id}>`);
                 contents.push(`<input type="hidden" name="authority" value=${member.authority}>`);
                 SubmitModal(document.getElementById('id-modal-submit'),
-                    'modal-bookshop-offer', contents, "구매/대출 신청", "신청하기",
+                    'modal-bookshop-offer', contents, "대출 신청", "신청하기",
                     contextPath + "/bookshops/history", 'POST', findSessionUserHistory);
             } else {
                 document.querySelectorAll('.i-am-client')
@@ -254,16 +250,10 @@ export const BookShop = (target) => {
         document.querySelector("form")
             .addEventListener("submit", (ev) => {
                 ev.preventDefault();
-                const price = document.getElementById("id-price").value;
                 const short = document.getElementById("id-short").value;
                 const comment = document.querySelector('#editor .ql-editor').innerHTML + "";
 
-                if (price !== "" && parseInt(isNaN(price))) {
-                    alert("가격 입력을 확인하세요");
-                    return;
-                }
                 const request = {
-                    sell_price: parseInt(price),
                     seller_short: short,
                     seller_comment: comment,
                     seller_id: member.id,

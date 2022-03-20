@@ -39,11 +39,7 @@
                             ${fn:substring(book.getBookTitle(),0,12)}...</a>
                     <p class="is-size-6-desktop is-size-6-mobile">
                         <span style="text-align: left">[${book.getAuthor()}]&nbsp;</span>
-                        <span style="text-align: right">&nbsp;
-                            ₩<fmt:formatNumber value="${bookshop.getSellPrice()}" pattern="#,###"/>
-                        </span>
                     </p><br>
-                    <p class="tag is-rounded is-success is-medium">${bookshop.getSelltypeId().getSelltypeDetail()}</p>
                 </article>
             </div>
         </c:forEach>
