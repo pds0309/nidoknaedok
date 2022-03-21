@@ -2,9 +2,11 @@ import {createElement} from "../utils/component.js";
 import {OpenDataSyncGET, FetchData} from "../components/FetchData.js";
 import {QuillEditor} from "../components/QuillEditor.js";
 import {EditorIconEvent} from "../components/EditorIconEvent.js";
-import {SubmitModal} from "../components/Modals.js";
+import {SubmitModal} from "../components/modals/SubmitModal.js";
 import {SellerConfirm} from "./shop/SellerConfirm.js";
 import {BuyerConfirm} from "./shop/BuyerConfirm.js";
+import {ClientConfirm} from "./shop/ClientConfirm.js";
+import {OwnerConfirm} from "./shop/OwnerConfirm.js";
 
 export const BookShop = (target) => {
     const currentURL = new URL(window.location);
@@ -156,8 +158,6 @@ export const BookShop = (target) => {
                     </div>
                     <div id="id-i-will-buy" class="column is-8 is-offset-2 is-full box i-am-client"></div>                        
                     <div class="column is-8 is-offset-2 is-full i-am-trader" style="display: none">
-                        <h1 class="subtitle is-spaced">거래신청한 회원들이예요!</h1>
-                        <small class="has-text-danger">&nbsp;※ 잠깐! 충분한 대화는 나누셨나요??</small><br>
                         <div id="id-i-will-sell"></div>
                     </div>
                 </div>
@@ -217,6 +217,7 @@ export const BookShop = (target) => {
             (async () => {
                 const result = await FetchData(contextPath + "/bookshops/historylist?memberid=" + member.id + "&bookshopid=" + bookshop.bookshop_id, 'GET');
                 SellerConfirm(document.getElementById("id-i-will-sell"), result.data, member.id);
+                OwnerConfirm(document.getElementById("id-i-will-sell"), result, member.id);
             })();
         } else {
             if (member.authority !== 'RESIGN') {
@@ -269,18 +270,21 @@ export const BookShop = (target) => {
                     alert(result.error.message);
                 })();
             });
+
         findSessionUserHistory();
 
         function findSessionUserHistory() {
-            if (currentUserName === '') {
+            if (currentUserName === '' || bookshopBookMemberVO.itIsMe) {
                 return;
             }
-            const response = OpenDataSyncGET(contextPath + "/bookshops/history?bookshopid=" + bookshop.bookshop_id);
-            if (response === "") {
-                return;
-            }
-            const result = JSON.parse(response);
-            BuyerConfirm(document.getElementById('id-i-will-buy'), result,bookshop.selltype_id,member.id);
+            (async () => {
+                const result = await FetchData(contextPath + "/bookshops/history?bookshopid=" + bookshop.bookshop_id, 'GET');
+                if (result.data.status_id.bookStatusId <= 2000) {
+                    BuyerConfirm(document.getElementById('id-i-will-buy'), result, member.id);
+                    return;
+                }
+                ClientConfirm(document.getElementById("id-i-will-buy"), result, member.id);
+            })();
         }
     }
     render();

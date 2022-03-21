@@ -5,6 +5,7 @@ import com.dao.bookshop.BookShopDAO;
 import com.dao.bookshop.BookShopHistoryDAO;
 import com.dto.bookshop.BookShopHistoryDTO;
 import com.dto.bookshop.BookShopHistoryVO;
+import com.dto.bookshop.BookShopStatusCode;
 import com.errors.exception.InvalidValueException;
 import com.errors.exception.NotAcceptableValueException;
 import org.apache.ibatis.session.SqlSession;
@@ -63,6 +64,22 @@ public class BookShopHistoryServiceImpl implements BookShopHistoryService {
     }
 
     @Override
+    public int deleteByBookshopId(long bookshopId) {
+        SqlSession session = MySqlSessionFactory.getSession();
+        int status = 0;
+        try {
+            status = historyDAO.deleteByBookshopId(session, bookshopId);
+            bookShopDAO.updateSellStatus(session, new BookShopHistoryDTO.Builder()
+                    .bookshopId(bookshopId)
+                    .statusId(BookShopStatusCode.SUBMIT).build());
+            session.commit();
+        } finally {
+            session.close();
+        }
+        return status;
+    }
+
+    @Override
     public List<BookShopHistoryVO.Member> findByBookshopId(long bookshopId) {
         SqlSession session = MySqlSessionFactory.getSession();
         try {
@@ -79,6 +96,9 @@ public class BookShopHistoryServiceImpl implements BookShopHistoryService {
         try {
             status = historyDAO.updateHistoryById(session, historyDTO);
             bookShopDAO.updateSellStatus(session, historyDTO);
+            if (checkLoanRequest(historyDTO.getStatusId())) {
+                historyDAO.deleteByBookshopId(session, historyDTO.getBookshopId());
+            }
             if (status == 0) {
                 throw new NotAcceptableValueException("이미 다른분과 약속하지 않으셨나요?");
             }
@@ -87,5 +107,9 @@ public class BookShopHistoryServiceImpl implements BookShopHistoryService {
             session.close();
         }
         return status;
+    }
+
+    private boolean checkLoanRequest(BookShopStatusCode statusCode) {
+        return statusCode == BookShopStatusCode.LOANING;
     }
 }

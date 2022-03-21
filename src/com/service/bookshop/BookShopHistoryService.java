@@ -13,6 +13,8 @@ public interface BookShopHistoryService {
 
     int deleteByBookshopIdId(Map<String, Long> paramMap);
 
+    int deleteByBookshopId(long bookshopId);
+
     List<BookShopHistoryVO.Member> findByBookshopId(long bookshopId);
 
     int updateHistoryById(BookShopHistoryDTO historyDTO);

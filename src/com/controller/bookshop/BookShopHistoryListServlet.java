@@ -17,8 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
-import java.util.HashMap;
-import java.util.Map;
 
 @WebServlet("/bookshops/historylist")
 public class BookShopHistoryListServlet extends HttpServlet {
@@ -47,5 +45,22 @@ public class BookShopHistoryListServlet extends HttpServlet {
         }
         historyService.updateHistoryById(new ObjectMapper().readValue(read, BookShopHistoryDTO.class));
         JSONResponse.send(response, null, response.getStatus());
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        BufferedReader bufferedReader = request.getReader();
+        String read = bufferedReader.readLine();
+        bufferedReader.close();
+        JSONObject result = new JSONObject(read);
+
+        long memberId = result.getLong("member_id");
+
+        if (!SessionHandler.isItMe(request.getSession(), memberId)) {
+            throw new UserAccessDeniedException("접근 권한이 없습니다");
+        }
+        long bookshopId = result.getLong("bookshop_id");
+        historyService.deleteByBookshopId(bookshopId);
+        JSONResponse.send(response, null, 201);
     }
 }
