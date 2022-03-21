@@ -1,5 +1,6 @@
-import {createElement} from "../utils/component.js";
-import {FetchData} from "./FetchData.js";
+import {createElement} from "../../utils/component.js";
+import {FetchData} from "../FetchData.js";
+import {modalBasicEvents} from "../../utils/modalBasicEvents.js";
 
 export function SubmitModal(target, id, [...content], title, btnTitle, url, type, endEvSuccessFunc) {
     let contents = ''
@@ -25,46 +26,7 @@ export function SubmitModal(target, id, [...content], title, btnTitle, url, type
     }
 
     const setEvent = () => {
-        // Functions to open and close a modal
-        function openModal($el) {
-            $el.classList.add('is-active');
-        }
-
-        function closeModal($el) {
-            $el.classList.remove('is-active');
-        }
-
-        function closeAllModals() {
-            (document.querySelectorAll('.modal') || []).forEach(($modal) => {
-                closeModal($modal);
-            });
-        }
-
-        // Add a click event on buttons to open a specific modal
-        (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
-            const modal = $trigger.dataset.target;
-            const $target = document.getElementById(modal);
-
-            $trigger.addEventListener('click', () => {
-                openModal($target);
-            });
-        });
-        // Add a click event on various child elements to close the parent modal
-        (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
-            const $target = $close.closest('.modal');
-
-            $close.addEventListener('click', () => {
-                closeModal($target);
-            });
-        });
-        // Add a keyboard event to close all modals
-        document.addEventListener('keydown', (event) => {
-            const e = event || window.event;
-            if (e.keyCode === 27) { // Escape key
-                closeAllModals();
-            }
-        });
-
+        modalBasicEvents(".js-modal-trigger");
 
         document.querySelector('.btn-modal-submit')
             .addEventListener('click', () => {
@@ -80,11 +42,9 @@ export function SubmitModal(target, id, [...content], title, btnTitle, url, type
                         if (response.status === 201) {
                             alert("등록 완료!");
                             endEvSuccessFunc();
-                        }
-                        else if (response.error.status === 403) {
+                        } else if (response.error.status === 403) {
                             alert("로그인 후 가능합니다");
-                        }
-                        else{
+                        } else {
                             alert(response.error.detail);
                         }
                         SubmitModal(target, id, [...content], title, btnTitle, url, type)
