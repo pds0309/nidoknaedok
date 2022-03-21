@@ -23,6 +23,10 @@ public class BookShopHistoryDAO {
         return session.delete(DIR + "deleteByBookshopIdId", paramMap);
     }
 
+    public int deleteByBookshopId(SqlSession session, long bookshopId) {
+        return session.delete(DIR + "deleteByBookshopId", bookshopId);
+    }
+
     public List<BookShopHistoryVO.Member> findByBookshopId(SqlSession session, long bookshopId) {
         return session.selectList(DIR + "findByBookshopId", bookshopId);
     }

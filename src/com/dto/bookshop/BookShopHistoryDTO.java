@@ -13,6 +13,8 @@ public class BookShopHistoryDTO {
     private String memo;
     private String createdAt;
     private BookShopStatusCode statusId;
+    private String expiredAt;
+    private String requestedAt;
 
     public BookShopHistoryDTO() {
         //
@@ -23,6 +25,8 @@ public class BookShopHistoryDTO {
         this.memberId = builder.memberId;
         this.memo = builder.memo;
         this.statusId = builder.statusId;
+        this.expiredAt = builder.expiredAt;
+        this.requestedAt = builder.requestedAt;
     }
 
     public static class Builder {
@@ -30,6 +34,8 @@ public class BookShopHistoryDTO {
         private long memberId;
         private String memo;
         private BookShopStatusCode statusId;
+        private String expiredAt;
+        private String requestedAt;
 
         public Builder() {
             //
@@ -52,6 +58,16 @@ public class BookShopHistoryDTO {
 
         public Builder statusId(BookShopStatusCode value) {
             statusId = value;
+            return this;
+        }
+
+        public Builder expiredAt(String value) {
+            expiredAt = value;
+            return this;
+        }
+
+        public Builder requestedAt(String value) {
+            requestedAt = value;
             return this;
         }
 
@@ -82,5 +98,13 @@ public class BookShopHistoryDTO {
 
     public long getHistoryId() {
         return historyId;
+    }
+
+    public String getRequestedAt() {
+        return requestedAt;
+    }
+
+    public String getExpiredAt() {
+        return expiredAt;
     }
 }
