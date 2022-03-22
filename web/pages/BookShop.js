@@ -219,6 +219,27 @@ export const BookShop = (target) => {
                 SellerConfirm(document.getElementById("id-i-will-sell"), result.data, member.id);
                 OwnerConfirm(document.getElementById("id-i-will-sell"), result, member.id);
             })();
+
+            document.getElementById("id-btn-delete")
+                .addEventListener("click", () => {
+                    if (confirm("정말 등록을 취소하시겠어요?")) {
+                        (async () => {
+                            const result = await FetchData(contextPath + "/bookshops", 'DELETE',
+                                'application/json', JSON.stringify({
+                                    bookshop_id: bookshop.bookshop_id,
+                                    seller_id: bookshop.seller_id
+                                }));
+                            if (result.status === 201) {
+                                alert("등록된 거래 취소 성공!");
+                                location.href = contextPath + "/home";
+                                return;
+                            }
+                            alert(result.error.detail);
+                        })();
+                    } else {
+                        return false;
+                    }
+                });
         } else {
             if (member.authority !== 'RESIGN') {
                 const contents = [];
