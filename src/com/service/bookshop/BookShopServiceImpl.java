@@ -5,6 +5,7 @@ import com.dao.bookshop.BookShopDAO;
 import com.dto.bookshop.BookShopDTO;
 import com.dto.bookshop.BookShopVO;
 import com.dto.common.PageDTO;
+import com.errors.exception.InvalidValueException;
 import com.errors.exception.UserAccessDeniedException;
 import com.errors.exception.UserNotFoundException;
 import org.apache.ibatis.session.SqlSession;
@@ -89,10 +90,25 @@ public class BookShopServiceImpl implements BookShopService {
         SqlSession session = MySqlSessionFactory.getSession();
         try {
             return bookShopDAO.findBookShopStatsByMemberId(session, memberId);
-        }
-        finally {
+        } finally {
             session.close();
         }
+    }
+
+    @Override
+    public int deleteByBookshopId(long bookshopId) {
+        SqlSession session = MySqlSessionFactory.getSession();
+        int status = 0;
+        try {
+            status = bookShopDAO.deleteByBookshopId(session, bookshopId);
+            if (status == 0) {
+                throw new InvalidValueException("부적절한 등록 취소 요청입니다.");
+            }
+            session.commit();
+        } finally {
+            session.close();
+        }
+        return status;
     }
 
     private void validMemberId(long sessionMemberId, long currentMemberId) {
