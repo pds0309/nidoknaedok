@@ -4,9 +4,11 @@ import com.controller.common.JSONResponse;
 import com.dto.book.BookApiDTO;
 import com.dto.book.BookDTO;
 import com.dto.bookshop.BookShopDTO;
+import com.dto.bookshop.BookShopHistoryDTO;
 import com.dto.bookshop.BookShopVO;
 import com.dto.common.PageDTO;
 import com.dto.member.MemberDTO;
+import com.errors.exception.UserAccessDeniedException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.service.book.BookService;
 import com.service.book.BookServiceImpl;
@@ -85,14 +87,8 @@ public class BookShopServlet extends HttpServlet {
         map.put("bookshops", bookShopPageDTO.gettList());
         map.put("prev", currentPage != 1);
         map.put("next", currentPage != totalPageNum);
-        map.put("page",currentPage);
+        map.put("page", currentPage);
         JSONResponse.send(response, map, response.getStatus());
-    }
-
-    private void setItIsMe(HttpServletRequest request, BookShopVO.Member bookShop, long id) {
-        if (SessionHandler.isItMe(request.getSession(), id)) {
-            bookShop.setItIsMe(true);
-        }
     }
 
     /**
@@ -112,6 +108,27 @@ public class BookShopServlet extends HttpServlet {
         Map<String, Object> map = new HashMap<>();
         map.put("result", status);
         JSONResponse.send(response, map, 200);
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        BufferedReader bufferedReader = request.getReader();
+        String read = bufferedReader.readLine();
+        bufferedReader.close();
+        BookShopDTO bookShopDTO = objectMapper.readValue(read, BookShopDTO.class);
+
+        if (!SessionHandler.isItMe(request.getSession(), bookShopDTO.getSellerId())) {
+            throw new UserAccessDeniedException("등록된 거래 취소에 대한 권한이 없습니다");
+        }
+
+        bookShopService.deleteByBookshopId(bookShopDTO.getBookshopId());
+        JSONResponse.send(response, null, 201);
+    }
+
+    private void setItIsMe(HttpServletRequest request, BookShopVO.Member bookShop, long id) {
+        if (SessionHandler.isItMe(request.getSession(), id)) {
+            bookShop.setItIsMe(true);
+        }
     }
 
     private boolean validParam(String param) {

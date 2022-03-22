@@ -54,4 +54,8 @@ public class BookShopDAO {
     public int updateSellStatus(SqlSession session, BookShopHistoryDTO bookShopHistoryDTO) {
         return session.update(DIR + "updateSellStatus", bookShopHistoryDTO);
     }
+
+    public int deleteByBookshopId(SqlSession session, long bookshopId) {
+        return session.delete(DIR + "deleteByBookshopId", bookshopId);
+    }
 }
